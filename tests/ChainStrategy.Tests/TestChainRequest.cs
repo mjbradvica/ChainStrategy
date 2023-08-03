@@ -5,5 +5,9 @@
     /// </summary>
     internal class TestChainRequest : ChainRequest
     {
+        /// <summary>
+        /// Gets or sets the test value for the request.
+        /// </summary>
+        public int Value { get; set; }
     }
 }

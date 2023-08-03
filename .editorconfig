@@ -66,3 +66,4 @@ csharp_style_expression_bodied_properties = true:silent
 
 dotnet_diagnostic.SA1633.severity = silent
 dotnet_diagnostic.SA1101.severity = silent
+dotnet_diagnostic.SA1309.severity = silent
