@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ChainStrategy.Registration
 {
@@ -26,19 +25,21 @@ namespace ChainStrategy.Registration
 
             foreach (var assembly in assemblies)
             {
-                TryAddChainProfiles(services, assembly);
+                TryAddChainProfiles(services, assembly, typeof(ChainProfile<>));
+                TryAddChainProfiles(services, assembly, typeof(StrategyProfile<,>));
             }
 
             services.AddTransient(typeof(IChainFactory<>), typeof(ChainFactory<>));
+            services.AddTransient(typeof(IStrategyFactory<,>), typeof(StrategyFactory<,>));
 
             return services;
         }
 
-        private static void TryAddChainProfiles(IServiceCollection services, Assembly assembly)
+        private static void TryAddChainProfiles(IServiceCollection services, Assembly assembly, Type baseType)
         {
             assembly.GetTypes()
                 .Where(type => !type.IsAbstract && !type.IsInterface)
-                .Where(type => type.BaseType != null && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == typeof(ChainProfile<>))
+                .Where(type => type.BaseType != null && type.BaseType.IsGenericType && type.BaseType.GetGenericTypeDefinition() == baseType)
                 .ToList()
                 .ForEach(implementationType =>
                 {

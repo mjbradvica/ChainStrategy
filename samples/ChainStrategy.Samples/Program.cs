@@ -24,6 +24,12 @@ namespace ChainStrategy.Samples
             var result = await handler.Handle(new SampleChainRequest(5));
 
             Console.WriteLine(result.Value);
+
+            var strategyFactory = provider.GetRequiredService<IStrategyFactory<SampleStrategyRequest, SampleStrategyResponse>>();
+
+            var strategyResult = await strategyFactory.ExecuteStrategy(new SampleStrategyRequest());
+
+            Console.WriteLine(strategyResult.Value);
         }
     }
 }
