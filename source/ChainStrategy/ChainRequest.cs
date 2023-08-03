@@ -1,4 +1,6 @@
-﻿namespace ChainStrategy
+﻿using System;
+
+namespace ChainStrategy
 {
     /// <summary>
     /// An abstract chain request that has basic properties and methods for a chain process.

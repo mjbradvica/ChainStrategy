@@ -1,8 +1,11 @@
 ﻿namespace ChainStrategy.Samples
 {
-    internal class Program
+    /// <summary>
+    /// Sample project for the ChainStrategy library.
+    /// </summary>
+    public class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             Console.WriteLine("Hello, World!");
         }
