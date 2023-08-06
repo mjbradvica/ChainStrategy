@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChainStrategy.Samples
+namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
     /// A sample strategy handler that will perform addition.

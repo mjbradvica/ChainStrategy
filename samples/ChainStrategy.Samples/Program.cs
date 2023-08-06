@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using ChainStrategy.Registration;
+using ChainStrategy.Samples.ChainOfResponsibility;
+using ChainStrategy.Samples.Strategy;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainStrategy.Samples

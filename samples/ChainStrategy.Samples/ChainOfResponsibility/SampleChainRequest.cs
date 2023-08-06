@@ -1,4 +1,4 @@
-﻿namespace ChainStrategy.Samples
+﻿namespace ChainStrategy.Samples.ChainOfResponsibility
 {
     /// <summary>
     /// A sample chain request to highlight the library.

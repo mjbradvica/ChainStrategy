@@ -1,4 +1,4 @@
-﻿namespace ChainStrategy.Samples
+﻿namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
     /// A sample strategy profile that designates conditions for each handler.

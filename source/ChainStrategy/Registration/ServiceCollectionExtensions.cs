@@ -25,8 +25,8 @@ namespace ChainStrategy.Registration
 
             foreach (var assembly in assemblies)
             {
-                TryAddChainProfiles(services, assembly, typeof(ChainProfile<>));
-                TryAddChainProfiles(services, assembly, typeof(StrategyProfile<,>));
+                TryAddProfiles(services, assembly, typeof(ChainProfile<>));
+                TryAddProfiles(services, assembly, typeof(StrategyProfile<,>));
             }
 
             services.AddTransient(typeof(IChainFactory<>), typeof(ChainFactory<>));
@@ -35,7 +35,7 @@ namespace ChainStrategy.Registration
             return services;
         }
 
-        private static void TryAddChainProfiles(IServiceCollection services, Assembly assembly, Type baseType)
+        private static void TryAddProfiles(IServiceCollection services, Assembly assembly, Type baseType)
         {
             assembly.GetTypes()
                 .Where(type => !type.IsAbstract && !type.IsInterface)

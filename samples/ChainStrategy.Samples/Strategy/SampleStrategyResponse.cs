@@ -1,4 +1,4 @@
-﻿namespace ChainStrategy.Samples
+﻿namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
     /// A sample class that represents a strategy response.

@@ -1,4 +1,4 @@
-﻿namespace ChainStrategy.Samples
+﻿namespace ChainStrategy.Samples.ChainOfResponsibility
 {
     /// <summary>
     /// Sample handler to show multiplication.
