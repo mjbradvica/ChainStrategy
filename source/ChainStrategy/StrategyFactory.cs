@@ -34,7 +34,7 @@ namespace ChainStrategy
         {
             var builder = _serviceProvider.GetRequiredService<StrategyProfile<TStrategyRequest, TStrategyResponse>>();
 
-            var matchingKey = builder.Strategies.Keys.FirstOrDefault(x => x.Invoke(request));
+            var matchingKey = builder.Strategies.Keys.FirstOrDefault(conditionCheck => conditionCheck.Invoke(request));
 
             if (matchingKey != null)
             {
@@ -61,7 +61,7 @@ namespace ChainStrategy
 
         private IStrategyHandler<TStrategyRequest, TStrategyResponse>? GetHandlerForType(Type type)
         {
-            var constructor = type.GetConstructors().FirstOrDefault(x => x.IsPublic);
+            var constructor = type.GetConstructors().FirstOrDefault(constructorInfo => constructorInfo.IsPublic);
 
             if (constructor == null)
             {

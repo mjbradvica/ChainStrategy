@@ -65,7 +65,7 @@ namespace ChainStrategy
 
             if (handler == null)
             {
-                var handlerType = _registrations.First().GetConstructors().FirstOrDefault(x => x.IsPublic);
+                var handlerType = _registrations.First().GetConstructors().FirstOrDefault(constructorInfo => constructorInfo.IsPublic);
 
                 if (handlerType != null)
                 {
@@ -90,7 +90,7 @@ namespace ChainStrategy
             }
             else
             {
-                var handlerType = _registrations[index].GetConstructors().FirstOrDefault(x => x.IsPublic);
+                var handlerType = _registrations[index].GetConstructors().FirstOrDefault(constructorInfo => constructorInfo.IsPublic);
 
                 if (handlerType != null)
                 {
