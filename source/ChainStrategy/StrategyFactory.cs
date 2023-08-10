@@ -32,7 +32,12 @@ namespace ChainStrategy
         /// <exception cref="ArgumentNullException">Thrown when no handlers could be found for a request and response.</exception>
         public async Task<TStrategyResponse> ExecuteStrategy(TStrategyRequest request)
         {
-            var builder = _serviceProvider.GetRequiredService<StrategyProfile<TStrategyRequest, TStrategyResponse>>();
+            var builder = _serviceProvider.GetService<StrategyProfile<TStrategyRequest, TStrategyResponse>>();
+
+            if (builder == null)
+            {
+                throw new NullReferenceException("No profile was found. Did you forget to register?");
+            }
 
             var matchingKey = builder.Strategies.Keys.FirstOrDefault(conditionCheck => conditionCheck.Invoke(request));
 
