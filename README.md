@@ -235,7 +235,7 @@ public class IMyService
 }
 ```
 
-> It is recommended you call the CreateChain method in the constructor as that is when ChainStrategy will initiate you chain and build your handlers.
+> It is recommended you call the CreateChain method in the constructor as that is when ChainStrategy will initiate your chain and build your handlers.
 
 #### Testing
 
@@ -353,7 +353,7 @@ You define a strategy by giving it a predicate based on your request object prop
 You may add a default strategy if no conditions are met. The default does not accept a predicate.
 
 ```csharp
-public class MyStrategyProfile<MyRequest, MyResponse>
+public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
 {
     public MyStrategyProfile()
     {
@@ -423,4 +423,4 @@ Yes! You can use any or all three in conjunction. None of them are mutually excl
 
 A Chain of Responsibility is a **medium usage** pattern. It is best used when you need to break a problem down into smaller easier-to-test chunks.
 
-A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of a algorithm that use the same interface.
+A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of a algorithm that uses the same interface.
