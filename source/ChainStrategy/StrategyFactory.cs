@@ -61,7 +61,7 @@ namespace ChainStrategy
                 }
             }
 
-            throw new ArgumentNullException(nameof(request), "No handler matched the request condition.");
+            throw new ArgumentNullException(nameof(request), "No handler matched the request condition. Think about adding a default handler.");
         }
 
         private IStrategyHandler<TStrategyRequest, TStrategyResponse>? GetHandlerForType(Type type)
