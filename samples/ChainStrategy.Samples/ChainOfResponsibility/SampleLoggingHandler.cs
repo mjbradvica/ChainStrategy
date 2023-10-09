@@ -31,7 +31,7 @@
             {
                 request.Faulted(exception);
 
-                return request;
+                return Task.FromResult(request);
             }
         }
     }
