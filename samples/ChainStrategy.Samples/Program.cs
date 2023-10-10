@@ -21,9 +21,7 @@ namespace ChainStrategy.Samples
 
             var factory = provider.GetRequiredService<IChainFactory<SampleChainRequest>>();
 
-            var handler = factory.CreateChain();
-
-            var result = await handler.Handle(new SampleChainRequest(5));
+            var result = await factory.Handler.Handle(new SampleChainRequest(5));
 
             Console.WriteLine(result.Value);
 

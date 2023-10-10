@@ -8,9 +8,8 @@
         where TRequest : IChainRequest
     {
         /// <summary>
-        /// Creates a chain of responsibility for the given request.
+        /// Gets the first handler in the chain.
         /// </summary>
-        /// <returns>An <see cref="IChainHandler{TRequest}"/> that represents the first step in a chain.</returns>
-        IChainHandler<TRequest> CreateChain();
+        IChainHandler<TRequest> Handler { get; }
     }
 }

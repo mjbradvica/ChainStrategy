@@ -25,37 +25,33 @@ namespace ChainStrategy.Tests
         /// Factory will thrown an exception when no profiles are found for a given request.
         /// </summary>
         [TestMethod]
-        public void CreateChain_NullProfile_ThrowsException()
+        public void Handler_NullProfile_ThrowsException()
         {
-            var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
-
-            Assert.ThrowsException<NullReferenceException>(factory.CreateChain);
+            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
         }
 
         /// <summary>
         /// Factory will throw an exception when no registrations are present in a profile.
         /// </summary>
         [TestMethod]
-        public void CreateChain_NoRegistrations_ThrowsException()
+        public void Handler_NoRegistrations_ThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfile>();
 
-            var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
-
-            Assert.ThrowsException<ArgumentNullException>(factory.CreateChain);
+            Assert.ThrowsException<ArgumentNullException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
         }
 
         /// <summary>
         /// Factory will create a proper chain given a profile with steps.
         /// </summary>
         [TestMethod]
-        public void CreateChain_ProfileWithSteps_CreatesChainProperly()
+        public void Handler_ProfileWithSteps_CreatesChainProperly()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithSteps>();
 
             var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
 
-            var firstHandler = factory.CreateChain();
+            var firstHandler = factory.Handler;
 
             Assert.IsNotNull(firstHandler);
         }
@@ -65,14 +61,14 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task CreateChain_CanInitializedHandlerDependencies()
+        public async Task Handler_CanInitializedHandlerDependencies()
         {
             _collection.AddTransient<TestChainDependency>();
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithDependentHandlers>();
 
             var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
 
-            var handler = factory.CreateChain();
+            var handler = factory.Handler;
 
             var result = await handler.Handle(new TestChainRequest());
 
@@ -83,26 +79,24 @@ namespace ChainStrategy.Tests
         /// Factory throws an exception when a handler does not have a public constructor.
         /// </summary>
         [TestMethod]
-        public void CreateChain_HandlerWithNoPublicConstructorThrowsException()
+        public void Handler_HandlerWithNoPublicConstructorThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithBadHandler>();
 
-            var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
-
-            Assert.ThrowsException<NullReferenceException>(factory.CreateChain);
+            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
         }
 
         /// <summary>
         /// Factory ignores handlers in the first position with non-public constructors.
         /// </summary>
         [TestMethod]
-        public void CreateChain_HandlerWithNoPublicConstructorInFirstPositionIsIgnored()
+        public void Handler_HandlerWithNoPublicConstructorInFirstPositionIsIgnored()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithBadFirstHandler>();
 
             var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
 
-            var chain = factory.CreateChain();
+            var chain = factory.Handler;
 
             Assert.IsNotNull(chain);
         }

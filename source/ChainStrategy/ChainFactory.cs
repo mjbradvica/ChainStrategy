@@ -13,7 +13,7 @@ namespace ChainStrategy
         where TRequest : IChainRequest
     {
         private readonly IServiceProvider _serviceProvider;
-        private IList<Type> _registrations;
+        private readonly IList<Type> _registrations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainFactory{TRequest}"/> class.
@@ -23,15 +23,7 @@ namespace ChainStrategy
         {
             _serviceProvider = serviceProvider;
             _registrations = new List<Type>();
-        }
 
-        /// <summary>
-        /// Creates a chain of responsibility for a given request object.
-        /// </summary>
-        /// <returns>A chain handler ready for execution.</returns>
-        /// <exception cref="NotImplementedException">Thrown when a profile could not be found for the request object.</exception>
-        public IChainHandler<TRequest> CreateChain()
-        {
             var profile = _serviceProvider.GetService<ChainProfile<TRequest>>();
 
             if (profile == null)
@@ -50,11 +42,16 @@ namespace ChainStrategy
 
             if (handler != null)
             {
-                return handler;
+                Handler = handler;
             }
-
-            throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
+            else
+            {
+                throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
+            }
         }
+
+        /// <inheritdoc />
+        public IChainHandler<TRequest> Handler { get; }
 
         private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers(IChainHandler<TRequest>? handler, int index)
         {
