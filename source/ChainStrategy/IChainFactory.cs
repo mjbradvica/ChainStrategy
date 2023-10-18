@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy
+﻿// <copyright file="IChainFactory.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy
 {
     /// <summary>
     /// An interface for a factory that will initialize a chain of responsibility for the given request object.

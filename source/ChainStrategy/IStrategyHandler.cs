@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿// <copyright file="IStrategyHandler.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+using System.Threading.Tasks;
 
 namespace ChainStrategy
 {
@@ -22,8 +26,8 @@ namespace ChainStrategy
     /// An interface to designate a strategy handler that does not return a response.
     /// </summary>
     /// <typeparam name="TStrategyRequest">The request object for the strategy handler.</typeparam>
-    public interface IStrategyHandler<in TStrategyRequest> : IStrategyHandler<TStrategyRequest, Unit>
-        where TStrategyRequest : IStrategyRequest<Unit>
+    public interface IStrategyHandler<in TStrategyRequest> : IStrategyHandler<TStrategyRequest, Nothing>
+        where TStrategyRequest : IStrategyRequest<Nothing>
     {
     }
 }

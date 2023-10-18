@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Samples.Strategy
+﻿// <copyright file="SampleStrategyMultiplication.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
     /// A sample strategy handler to perform multiplication.

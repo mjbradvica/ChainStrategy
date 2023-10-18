@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ChainRequestTests.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChainStrategy.Tests

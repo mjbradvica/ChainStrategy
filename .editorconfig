@@ -64,7 +64,6 @@ csharp_style_expression_bodied_constructors = false:silent
 csharp_style_expression_bodied_operators = false:silent
 csharp_style_expression_bodied_properties = true:silent
 
-dotnet_diagnostic.SA1633.severity = silent
-dotnet_diagnostic.SA1101.severity = silent
-dotnet_diagnostic.SA1309.severity = silent
-dotnet_diagnostic.IDE0270.severity = silent
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1309.severity = none
+dotnet_diagnostic.IDE0270.severity = none

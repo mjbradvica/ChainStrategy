@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Samples.Strategy
+﻿// <copyright file="SampleStrategyRequest.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
     /// A class that represents a sample strategy request.

@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Samples.ChainOfResponsibility
+﻿// <copyright file="SampleChainProfile.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Samples.ChainOfResponsibility
 {
     /// <summary>
     /// An example chain profile.

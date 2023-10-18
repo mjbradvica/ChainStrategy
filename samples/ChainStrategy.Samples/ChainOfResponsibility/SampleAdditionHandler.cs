@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Samples.ChainOfResponsibility
+﻿// <copyright file="SampleAdditionHandler.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Samples.ChainOfResponsibility
 {
     /// <summary>
     /// Sample handler to show addition.

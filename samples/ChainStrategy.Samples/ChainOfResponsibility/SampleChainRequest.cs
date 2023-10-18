@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Samples.ChainOfResponsibility
+﻿// <copyright file="SampleChainRequest.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Samples.ChainOfResponsibility
 {
     /// <summary>
     /// A sample chain request to highlight the library.

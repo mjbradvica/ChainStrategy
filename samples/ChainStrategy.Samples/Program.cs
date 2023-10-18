@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿// <copyright file="Program.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+using System.Reflection;
 using ChainStrategy.Registration;
 using ChainStrategy.Samples.ChainOfResponsibility;
 using ChainStrategy.Samples.Strategy;

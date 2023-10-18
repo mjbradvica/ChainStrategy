@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Tests
+﻿// <copyright file="TestChainProfileWithBadFirstHandler.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Tests
 {
     /// <summary>
     /// A test chain profile with a bad handler in the first position.

@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy
+﻿// <copyright file="IChainRequest.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy
 {
     /// <summary>
     /// The basic interface for a request object in a chain of responsibility.

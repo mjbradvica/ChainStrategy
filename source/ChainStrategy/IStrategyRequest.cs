@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy
+﻿// <copyright file="IStrategyRequest.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy
 {
     /// <summary>
     /// An interface to designate a request for a strategy handler.
@@ -11,7 +15,7 @@
     /// <summary>
     /// An interface to designate a request for a strategy handler that returns void.
     /// </summary>
-    public interface IStrategyRequest : IStrategyRequest<Unit>
+    public interface IStrategyRequest : IStrategyRequest<Nothing>
     {
     }
 }

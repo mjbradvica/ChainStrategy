@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Tests
+﻿// <copyright file="TestChainRequest.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Tests
 {
     /// <summary>
     /// Internal class to allow testing of the <see cref="ChainRequest"/> class.
