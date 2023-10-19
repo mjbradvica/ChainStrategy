@@ -11,7 +11,7 @@ namespace ChainStrategy
     /// Allows an end-user to configure handler and their order of operations for a request.
     /// </summary>
     /// <typeparam name="TRequest">The request for the chain being configured.</typeparam>
-    public class ChainProfile<TRequest>
+    public abstract class ChainProfile<TRequest>
         where TRequest : IChainRequest
     {
         private readonly List<Type> _registrations;
@@ -19,7 +19,7 @@ namespace ChainStrategy
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainProfile{TRequest}"/> class.
         /// </summary>
-        public ChainProfile()
+        protected ChainProfile()
         {
             _registrations = new List<Type>();
         }

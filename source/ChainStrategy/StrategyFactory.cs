@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,7 @@ namespace ChainStrategy
         /// <param name="request">The request to be executed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation that wraps the response.</returns>
         /// <exception cref="ArgumentNullException">Thrown when no handlers could be found for a request and response.</exception>
-        public async Task<TStrategyResponse> ExecuteStrategy(TStrategyRequest request)
+        public async Task<TStrategyResponse> Execute(TStrategyRequest request)
         {
             var builder = _serviceProvider.GetService<StrategyProfile<TStrategyRequest, TStrategyResponse>>();
 
@@ -77,7 +78,19 @@ namespace ChainStrategy
                 throw new ArgumentNullException(nameof(type), "No public constructor on your handler exists.");
             }
 
-            var dependencies = constructor.GetParameters().Select(parameterInfo => _serviceProvider.GetService(parameterInfo.ParameterType));
+            var dependencies = new List<object?>();
+
+            foreach (var parameterInfo in constructor.GetParameters())
+            {
+                var dependency = _serviceProvider.GetService(parameterInfo.ParameterType);
+
+                if (dependency == null)
+                {
+                    throw new NullReferenceException($"The dependency {parameterInfo.ParameterType} could not be resolved. Did you register it?");
+                }
+
+                dependencies.Add(dependency);
+            }
 
             return constructor.Invoke(dependencies.ToArray()) as IStrategyHandler<TStrategyRequest, TStrategyResponse>;
         }

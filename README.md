@@ -221,16 +221,16 @@ Simply inject a IChainFactory of type T where T is your request when needed. The
 ```csharp
 public class IMyService
 {
-    private readonly IChainHandler<MyRequest> _handler;
+    private readonly IChainFactory<MyRequest> _chainFactory;
 
-    public IMyService(IChainFactory<MyRequest> _chainFactory)
+    public IMyService(IChainFactory<MyRequest> chainFactory)
     {
-        _handler = _chainFactory.Handler;
+        _chainFactory = chainFactory;
     }
 
     public async Task Handle()
     {
-        var result = await _handler.Handle(new MyRequest());
+        var result = await _chainFactory.Execute(new MyRequest());
     }
 }
 ```
@@ -270,7 +270,7 @@ public class MyHandlerTests
     public async Task ServiceTestForFactory()
     {
         var mock = new Mock<IChainFactory<MyRequest>>();
-        mock.Setup(x => x.CreateChain()).Returns(new MyHandler(null));
+        mock.Setup(x => x.Execute(It.IsAny<MyRequest>())).ReturnsAsync(new MyHandler(null));
 
         var service = new MyService(mock.Object);
 
@@ -386,7 +386,7 @@ public class MyService
 
     public async Task Handle()
     {
-        var result = await _strategyFactory.ExecuteStrategy(new MyRequest());
+        var result = await _strategyFactory.Execute(new MyRequest());
     }
 }
 ```

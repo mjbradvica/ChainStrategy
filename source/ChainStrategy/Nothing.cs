@@ -7,7 +7,7 @@ namespace ChainStrategy
     /// <summary>
     /// Class that represents a void return type for a strategy handler.
     /// </summary>
-    public class Nothing
+    public sealed class Nothing
     {
         /// <summary>
         /// An instance ot Nothing to represent void.

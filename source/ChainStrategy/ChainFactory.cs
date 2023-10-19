@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChainStrategy
@@ -16,8 +17,9 @@ namespace ChainStrategy
     public sealed class ChainFactory<TRequest> : IChainFactory<TRequest>
         where TRequest : IChainRequest
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IList<Type> _registrations;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IChainHandler<TRequest> _handler;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainFactory{TRequest}"/> class.
@@ -46,7 +48,7 @@ namespace ChainStrategy
 
             if (handler != null)
             {
-                Handler = handler;
+                _handler = handler;
             }
             else
             {
@@ -54,8 +56,11 @@ namespace ChainStrategy
             }
         }
 
-        /// <inheritdoc />
-        public IChainHandler<TRequest> Handler { get; }
+        /// <inheritdoc/>
+        public async Task<TRequest> Execute(TRequest request)
+        {
+            return await _handler.Handle(request);
+        }
 
         private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers(IChainHandler<TRequest>? handler, int index)
         {
@@ -80,7 +85,14 @@ namespace ChainStrategy
                         }
                         else
                         {
-                            dependencies.Add(_serviceProvider.GetService(dependency.ParameterType));
+                            var parameter = _serviceProvider.GetService(dependency.ParameterType);
+
+                            if (parameter == null)
+                            {
+                                throw new NullReferenceException($"A chain parameter could not be resolved for the type {dependency.ParameterType}. Did you register it?");
+                            }
+
+                            dependencies.Add(parameter);
                         }
                     }
 
@@ -88,6 +100,8 @@ namespace ChainStrategy
 
                     return InstantiateHandlers(step, ++index);
                 }
+
+                throw new NullReferenceException($"A public constructor for {handlerType} could not be found. You must have a public constructor.");
             }
             else
             {

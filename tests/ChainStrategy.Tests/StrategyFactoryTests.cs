@@ -37,7 +37,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.ExecuteStrategy(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest()));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ChainStrategy.Tests
         {
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.ExecuteStrategy(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest()));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            var result = await factory.ExecuteStrategy(new TestStrategyRequest());
+            var result = await factory.Execute(new TestStrategyRequest());
 
             Assert.AreEqual(5, result.Value);
         }
@@ -81,7 +81,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            var result = await factory.ExecuteStrategy(new TestStrategyRequest());
+            var result = await factory.Execute(new TestStrategyRequest());
 
             Assert.AreEqual(20, result.Value);
         }
@@ -98,7 +98,40 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.ExecuteStrategy(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest()));
+        }
+
+        /// <summary>
+        /// Ensures an exception is throw for handlers who don't have dependencies registered.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+        [TestMethod]
+        public async Task ExecuteStrategy_HandlerWithNonRegisteredDependencies_ThrowsException()
+        {
+            _serviceCollection
+                .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileWithDependentHandler>();
+
+            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest()));
+        }
+
+        /// <summary>
+        /// Ensures a strategy executes with a handler with dependencies.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+        [TestMethod]
+        public async Task ExecuteStrategy_HandlerNonRegisteredDependencies_ExecutesCorrectly()
+        {
+            _serviceCollection.AddTransient<TestChainDependency>();
+            _serviceCollection
+                .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileWithDependentHandler>();
+
+            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+
+            var result = await factory.Execute(new TestStrategyRequest());
+
+            Assert.AreEqual(5, result.Value);
         }
     }
 }

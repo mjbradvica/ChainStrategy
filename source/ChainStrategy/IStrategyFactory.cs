@@ -19,6 +19,6 @@ namespace ChainStrategy
         /// </summary>
         /// <param name="request">The request to be executed by the strategy.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation that contains the response object.</returns>
-        Task<TStrategyResponse> ExecuteStrategy(TStrategyRequest request);
+        Task<TStrategyResponse> Execute(TStrategyRequest request);
     }
 }

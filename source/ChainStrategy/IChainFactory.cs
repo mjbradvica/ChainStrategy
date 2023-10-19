@@ -2,6 +2,8 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading.Tasks;
+
 namespace ChainStrategy
 {
     /// <summary>
@@ -12,8 +14,10 @@ namespace ChainStrategy
         where TRequest : IChainRequest
     {
         /// <summary>
-        /// Gets the first handler in the chain.
+        /// Executes a chain of responsibility given a request.
         /// </summary>
-        IChainHandler<TRequest> Handler { get; }
+        /// <param name="request">The request object to be executed.</param>
+        /// <returns>A <see cref="Task"/> of the request type representing the asynchronous operation.</returns>
+        Task<TRequest> Execute(TRequest request);
     }
 }
