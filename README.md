@@ -1,5 +1,7 @@
 # ChainStrategy
 
+![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
+
 An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
 The advantages of ChainStrategy are:
