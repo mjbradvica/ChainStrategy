@@ -218,7 +218,7 @@ builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("
 
 #### Usage
 
-Simply inject a IChainFactory of type T where T is your request when needed. The first handler will be returned to you via the Handler property. To initiate a chain, pass a request object to the Handle method.
+Simply inject a IChainFactory of type T where T is your request when needed. Call the Execute method on the factory object to initiate your chain.
 
 ```csharp
 public class IMyService
