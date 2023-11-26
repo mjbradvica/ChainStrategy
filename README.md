@@ -2,6 +2,18 @@
 
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
+## Table of Contents
+
+[Overview](#overview)
+[Installation](#installation)
+[Setup](#setup)
+[Quick Start](#quick-start)
+[Detailed Chain of Responsibility](#chain-of-responsibility)
+[Detailed Strategy](#strategy)
+[FAQ](#faq)
+
+## Overview
+
 An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
 The advantages of ChainStrategy are:
@@ -23,6 +35,162 @@ Install-Package ChainStrategy
 ```
 
 ## Setup
+
+ChainStrategy provides a built-in method for easy DependencyInjection with any DI container that is Microsoft compatible.
+
+```csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddChainStrategy(Assembly.GetExecutingAssembly());
+
+        // Continue setup below
+    }
+}
+```
+
+The method also accepts a params of Assemblies to register from if you need to add handlers and profiles from multiple assemblies.
+
+```csharp
+builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("SecondProject"));
+```
+
+### Quick Start
+
+#### Quick Chain of Responsibility
+
+Create a request object that inherits from the ChainRequest base class.
+
+```csharp
+public class MyChainRequest : ChainRequest
+{
+    public int Value { get; set; }
+
+    // potentially lots of properties here.
+}
+```
+
+Create handlers that inherit from the ChainHandler of T, where T is the type of the your request object.
+
+Implement the DoWork method for each handler.
+
+```csharp
+public class MyChainHandler : ChainHandler<MyChainRequest>
+{
+    public MyChainHandler(IChainHandler<MyChainRequest>? handler)
+        : base(handler)
+    {
+    }
+
+    public override Task<MyChainRequest> DoWork(MyChainRequest request)
+    {
+        request.Value += 10;
+
+        return Task.FromResult(request);
+    }
+}
+```
+
+Create a profile for a chain that inherits the ChainProfile class. Add steps in the constructor.
+
+```csharp
+public class MyProfile : ChainProfile<MyChainRequest>
+{
+    public MyProfile()
+    {
+        AddStep<MyChainHandler>()
+        .AddStep<NextStep>()
+        .AddStep<FinalStep>();
+    }
+}
+```
+
+Start a chain by injecting an IChainFactory of type T into a service. Call the Execute method and pass a request object.
+
+```csharp
+public class IMyService
+{
+    private readonly IChainFactory<MyRequest> _chainFactory;
+
+    public IMyService(IChainFactory<MyRequest> chainFactory)
+    {
+        _chainFactory = chainFactory;
+    }
+
+    public async Task Handle()
+    {
+        var result = await _chainFactory.Execute(new MyRequest());
+    }
+}
+```
+
+#### Quick Strategy
+
+Create a request and response object for a strategy. The request object must inherit from the IStrategyRequest object of type T, where T is the type of the response object.
+
+```csharp
+public class MyResponse
+{
+    public int MyResult { get; set; }
+}
+
+public class MyRequest : IStrategyRequest<MyResponse>
+{
+    // properties in here
+}
+```
+
+Create any handlers required by inheriting from the IStrategyHandler of T and K. Where T is the type of the request object and K is the type of the response object.
+
+```csharp
+public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
+{
+    public async Task<MyResponse> Handle(MyRequest request)
+    {
+        // implement and return response
+    }
+}
+```
+
+Create a profile by inheriting from the StrategyProfile of type T and K. Where T is the type of the request object and K is the type of the response object.
+
+Add predicate conditions for each handler. Use the AddDefault for a default.
+
+```csharp
+public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
+{
+    public MyStrategyProfile()
+    {
+        AddStrategy<MyFirstHandler>(request => request.Value > 10);
+        AddStrategy<MySecondHandler>(request => request.Value == 0);
+        AddDefault<MyDefaultHandler>();
+    }
+}
+```
+
+Start a strategy by injecting an IStrategyFactory of type T and K. Where T is the type of the request object and K is the type of the response object.
+
+Call the Execute method and pass a request object.
+
+```csharp
+public class MyService
+{
+    private readonly IStrategyFactory<MyRequest, MyResponse> _strategyFactory;
+
+    public MyService(IStrategyFactory<MyRequest, MyResponse> strategyFactory)
+    {
+        _strategyFactory = strategyFactory;
+    }
+
+    public async Task Handle()
+    {
+        var result = await _strategyFactory.Execute(new MyRequest());
+    }
+}
+```
 
 ### Chain of Responsibility
 
@@ -49,7 +217,7 @@ You must implement the "DoWork" method for each handler.
 public class MyChainHandler : ChainHandler<MyChainRequest>
 {
     public MyChainHandler(IChainHandler<MyChainRequest>? handler)
-    : base(handler)
+        : base(handler)
     {
     }
 
@@ -191,30 +359,6 @@ public class MyProfile : ChainProfile<MyChainRequest>
 The library will execute each step in the order you define them.
 
 > Do not put conditional logic in a profile. That kind of logic belongs in handlers.
-
-#### Hooking into Dependency Injection
-
-ChainStrategy provides a build in method for easy DependencyInjection with any DI container that is Microsoft compatible.
-
-```csharp
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.AddChainStrategy(Assembly.GetExecutingAssembly());
-
-        // Continue setup below
-    }
-}
-```
-
-The method will accepts a params of Assemblies to register from if you need to add handlers and profiles from multiple assemblies.
-
-```csharp
-builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("SecondProject"));
-```
 
 #### Usage
 
@@ -363,10 +507,6 @@ public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
     }
 }
 ```
-
-#### Dependency Injection
-
-The same method for wiring chains will also handle strategies as well. Just make sure you include all assemblies in your project that contain profiles or handlers.
 
 #### Testing Strategy Handlers
 
