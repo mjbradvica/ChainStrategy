@@ -22,8 +22,9 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
         /// Adds to the current request value.
         /// </summary>
         /// <param name="request">The current request object.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A modified request object.</returns>
-        public override Task<SampleChainRequest> DoWork(SampleChainRequest request)
+        public override Task<SampleChainRequest> DoWork(SampleChainRequest request, CancellationToken cancellationToken)
         {
             request.Value += 5;
 

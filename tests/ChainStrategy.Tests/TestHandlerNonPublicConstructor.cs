@@ -2,6 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChainStrategy.Tests
@@ -19,8 +20,9 @@ namespace ChainStrategy.Tests
         /// Performs an operation on a request object.
         /// </summary>
         /// <param name="request">The request object for the method.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The same request object post-operation.</returns>
-        public Task<TestChainRequest> Handle(TestChainRequest request)
+        public Task<TestChainRequest> Handle(TestChainRequest request, CancellationToken cancellationToken)
         {
             ++request.Value;
 

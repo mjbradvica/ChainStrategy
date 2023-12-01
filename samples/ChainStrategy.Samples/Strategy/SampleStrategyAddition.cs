@@ -13,8 +13,9 @@ namespace ChainStrategy.Samples.Strategy
         /// Performs an addition operation.
         /// </summary>
         /// <param name="request">Our request object being executed.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public Task<SampleStrategyResponse> Handle(SampleStrategyRequest request)
+        public Task<SampleStrategyResponse> Handle(SampleStrategyRequest request, CancellationToken cancellationToken)
         {
             return Task.FromResult(new SampleStrategyResponse { Value = request.InitialValue + 10 });
         }

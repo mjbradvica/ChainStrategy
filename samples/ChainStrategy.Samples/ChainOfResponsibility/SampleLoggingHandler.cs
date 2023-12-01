@@ -24,12 +24,13 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
         /// A middleware method for logging a request.
         /// </summary>
         /// <param name="request">The request object.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public override Task<T> Middleware(T request)
+        public override Task<T> Middleware(T request, CancellationToken cancellationToken)
         {
             try
             {
-                return base.Middleware(request);
+                return base.Middleware(request, cancellationToken);
             }
             catch (Exception exception)
             {
