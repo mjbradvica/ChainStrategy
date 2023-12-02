@@ -2,6 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChainStrategy
@@ -17,7 +18,8 @@ namespace ChainStrategy
         /// Executes a chain of responsibility given a request.
         /// </summary>
         /// <param name="request">The request object to be executed.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> of the request type representing the asynchronous operation.</returns>
-        Task<TRequest> Execute(TRequest request);
+        Task<TRequest> Execute(TRequest request, CancellationToken cancellationToken = default);
     }
 }

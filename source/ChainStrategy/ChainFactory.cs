@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -57,9 +58,9 @@ namespace ChainStrategy
         }
 
         /// <inheritdoc/>
-        public async Task<TRequest> Execute(TRequest request)
+        public async Task<TRequest> Execute(TRequest request, CancellationToken cancellationToken)
         {
-            return await _handler.Handle(request);
+            return await _handler.Handle(request, cancellationToken);
         }
 
         private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers(IChainHandler<TRequest>? handler, int index)

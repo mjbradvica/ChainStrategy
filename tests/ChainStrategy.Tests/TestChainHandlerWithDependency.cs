@@ -2,6 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChainStrategy.Tests
@@ -28,8 +29,9 @@ namespace ChainStrategy.Tests
         /// Does work and returns the request.
         /// </summary>
         /// <param name="request">The request object.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The same request object after the operation is complete.</returns>
-        public override Task<TestChainRequest> DoWork(TestChainRequest request)
+        public override Task<TestChainRequest> DoWork(TestChainRequest request, CancellationToken cancellationToken)
         {
             ++request.Value;
 

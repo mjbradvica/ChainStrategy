@@ -2,6 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChainStrategy
@@ -18,8 +19,9 @@ namespace ChainStrategy
         /// A method to be implemented by a concrete handler to perform logic on a request.
         /// </summary>
         /// <param name="request">The request to be processed by the handler.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation that contains the response object.</returns>
-        public Task<TStrategyResponse> Handle(TStrategyRequest request);
+        public Task<TStrategyResponse> Handle(TStrategyRequest request, CancellationToken cancellationToken);
     }
 
     /// <summary>

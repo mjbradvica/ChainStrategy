@@ -2,6 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,7 +26,7 @@ namespace ChainStrategy.Tests
             var request = new TestChainRequest();
             request.Faulted();
 
-            var result = await handler.Handle(request);
+            var result = await handler.Handle(request, CancellationToken.None);
 
             Assert.AreEqual(0, result.Value);
         }
@@ -41,7 +42,7 @@ namespace ChainStrategy.Tests
 
             var request = new TestChainRequest();
 
-            var result = await handler.Handle(request);
+            var result = await handler.Handle(request, CancellationToken.None);
 
             Assert.AreEqual(1, result.Value);
         }
@@ -57,7 +58,7 @@ namespace ChainStrategy.Tests
 
             var request = new TestChainRequest();
 
-            var result = await handler.Handle(request);
+            var result = await handler.Handle(request, CancellationToken.None);
 
             Assert.AreEqual(2, result.Value);
         }

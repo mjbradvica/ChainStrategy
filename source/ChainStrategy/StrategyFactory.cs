@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,8 +35,9 @@ namespace ChainStrategy
         /// </summary>
         /// <param name="request">The request to be executed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation that wraps the response.</returns>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <exception cref="ArgumentNullException">Thrown when no handlers could be found for a request and response.</exception>
-        public async Task<TStrategyResponse> Execute(TStrategyRequest request)
+        public async Task<TStrategyResponse> Execute(TStrategyRequest request, CancellationToken cancellationToken)
         {
             var builder = _serviceProvider.GetService<StrategyProfile<TStrategyRequest, TStrategyResponse>>();
 
@@ -52,7 +54,7 @@ namespace ChainStrategy
 
                 if (handler != null)
                 {
-                    return await handler.Handle(request);
+                    return await handler.Handle(request, cancellationToken);
                 }
             }
 
@@ -62,7 +64,7 @@ namespace ChainStrategy
 
                 if (handler != null)
                 {
-                    return await handler.Handle(request);
+                    return await handler.Handle(request, cancellationToken);
                 }
             }
 

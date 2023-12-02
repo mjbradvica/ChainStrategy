@@ -13,8 +13,9 @@ namespace ChainStrategy.Samples.Strategy
         /// Performs multiplication on our request.
         /// </summary>
         /// <param name="request">The request object to execute.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public Task<SampleStrategyResponse> Handle(SampleStrategyRequest request)
+        public Task<SampleStrategyResponse> Handle(SampleStrategyRequest request, CancellationToken cancellationToken)
         {
             return Task.FromResult(new SampleStrategyResponse { Value = request.InitialValue * 3 });
         }

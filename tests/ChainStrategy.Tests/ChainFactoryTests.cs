@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -57,7 +58,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
 
-            var result = await factory.Execute(new TestChainRequest());
+            var result = await factory.Execute(new TestChainRequest(), CancellationToken.None);
 
             Assert.AreEqual(2, result.Value);
         }

@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -37,7 +38,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace ChainStrategy.Tests
         {
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            var result = await factory.Execute(new TestStrategyRequest());
+            var result = await factory.Execute(new TestStrategyRequest(), CancellationToken.None);
 
             Assert.AreEqual(5, result.Value);
         }
@@ -81,7 +82,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            var result = await factory.Execute(new TestStrategyRequest());
+            var result = await factory.Execute(new TestStrategyRequest(), CancellationToken.None);
 
             Assert.AreEqual(20, result.Value);
         }
@@ -98,7 +99,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest()));
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -129,7 +130,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
 
-            var result = await factory.Execute(new TestStrategyRequest());
+            var result = await factory.Execute(new TestStrategyRequest(), CancellationToken.None);
 
             Assert.AreEqual(5, result.Value);
         }

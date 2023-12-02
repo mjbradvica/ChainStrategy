@@ -2,6 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChainStrategy
@@ -25,33 +26,35 @@ namespace ChainStrategy
         }
 
         /// <inheritdoc/>
-        public virtual async Task<TRequest> Handle(TRequest request)
+        public virtual async Task<TRequest> Handle(TRequest request, CancellationToken cancellationToken)
         {
             if (request.IsFaulted)
             {
                 return request;
             }
 
-            var result = await Middleware(request);
+            var result = await Middleware(request, cancellationToken);
 
-            return _handler == null ? result : await _handler.Handle(request);
+            return _handler == null ? result : await _handler.Handle(request, cancellationToken);
         }
 
         /// <summary>
         /// Implementation method for each handler to perform its' unique logic.
         /// </summary>
         /// <param name="request">The request for the chain.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The resulting request object after a handler is finished.</returns>
-        public abstract Task<TRequest> DoWork(TRequest request);
+        public abstract Task<TRequest> DoWork(TRequest request, CancellationToken cancellationToken);
 
         /// <summary>
         /// Allows a step to tap into lifecycle of a handler.
         /// </summary>
         /// <param name="request">The request for the chain.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The resulting request after any lifecycle logic is required.</returns>
-        public virtual async Task<TRequest> Middleware(TRequest request)
+        public virtual async Task<TRequest> Middleware(TRequest request, CancellationToken cancellationToken)
         {
-            return await DoWork(request);
+            return await DoWork(request, cancellationToken);
         }
     }
 }
