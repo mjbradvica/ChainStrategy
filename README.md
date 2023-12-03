@@ -1,31 +1,41 @@
 # ChainStrategy
 
+![TempIcon](./images/tempIcon.jpg)
+
+---
+
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
-## Table of Contents
-
-* [Overview](#overview)
-* [Installation](#installation)
-* [Setup](#setup)
-* [Quick Start](#quick-start)
-* [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
-* [Detailed Strategy Usage](#strategy)
-* [FAQ](#faq)
-
 ## Overview
+
+---
 
 An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
 The advantages of ChainStrategy are:
 
-* :page_with_curl: Ready to go with minimal boilerplate
-* :heavy_check_mark: Easy unit testing
-* :arrow_down: Build with dependency injection in mind
-* :foot: Small footprint
-* :books: Easy-to-learn, minimal API
-* :coin: Cancellation Token support
+- :page_with_curl: Ready to go with minimal boilerplate
+- :heavy_check_mark: Easy unit testing
+- :arrow_down: Build with dependency injection in mind
+- :foot: Small footprint
+- :books: Easy-to-learn, minimal API
+- :coin: Cancellation Token support
+
+## Table of Contents
+
+---
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Quick Start](#quick-start)
+- [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
+- [Detailed Strategy Usage](#strategy)
+- [FAQ](#faq)
 
 ## Installation
+
+---
 
 The easiest way is [install with NuGet](https://www.nuget.org/).
 
@@ -36,6 +46,8 @@ Install-Package ChainStrategy
 ```
 
 ## Setup
+
+---
 
 ChainStrategy provides a built-in method for easy DependencyInjection with any DI container that is Microsoft compatible.
 
@@ -535,6 +547,8 @@ public class MyService
 ```
 
 ## FAQ
+
+---
 
 ### Do I need a Chain of Responsibility?
 
