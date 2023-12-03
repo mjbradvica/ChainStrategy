@@ -4,13 +4,13 @@
 
 ## Table of Contents
 
-[Overview](#overview)
-[Installation](#installation)
-[Setup](#setup)
-[Quick Start](#quick-start)
-[Detailed Chain of Responsibility](#chain-of-responsibility)
-[Detailed Strategy](#strategy)
-[FAQ](#faq)
+* [Overview](#overview)
+* [Installation](#installation)
+* [Setup](#setup)
+* [Quick Start](#quick-start)
+* [Detailed Chain of Responsibility](#chain-of-responsibility)
+* [Detailed Strategy](#strategy)
+* [FAQ](#faq)
 
 ## Overview
 
@@ -18,11 +18,11 @@ An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
 The advantages of ChainStrategy are:
 
-- Ready to go with minimal boilerplate
-- Easy unit testing
-- Build with dependency injection in mind
-- Small footprint
-- Easy-to-learn, minimal API
+* Ready to go with minimal boilerplate
+* Easy unit testing
+* Build with dependency injection in mind
+* Small footprint
+* Easy-to-learn, minimal API
 
 ## Installation
 
