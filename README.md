@@ -8,8 +8,8 @@
 * [Installation](#installation)
 * [Setup](#setup)
 * [Quick Start](#quick-start)
-* [Detailed Chain of Responsibility](#chain-of-responsibility)
-* [Detailed Strategy](#strategy)
+* [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
+* [Detailed Strategy Usage](#strategy)
 * [FAQ](#faq)
 
 ## Overview
@@ -18,11 +18,12 @@ An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
 The advantages of ChainStrategy are:
 
-* Ready to go with minimal boilerplate
-* Easy unit testing
-* Build with dependency injection in mind
-* Small footprint
-* Easy-to-learn, minimal API
+* :page_with_curl: Ready to go with minimal boilerplate
+* :heavy_check_mark: Easy unit testing
+* :arrow_down: Build with dependency injection in mind
+* :foot: Small footprint
+* :books: Easy-to-learn, minimal API
+* :coin: Cancellation Token support
 
 ## Installation
 
