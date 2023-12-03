@@ -1,12 +1,12 @@
 # ChainStrategy
 
+An implementation of the Chain of Responsibility and Strategy patterns for .NET.
+
 ![TempIcon](./images/tempIcon.jpg)
 
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
 ## Overview
-
-An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
 The advantages of ChainStrategy are:
 
@@ -14,18 +14,23 @@ The advantages of ChainStrategy are:
 - :heavy_check_mark: Easy unit testing
 - :arrow_down: Build with dependency injection in mind
 - :foot: Small footprint
-- :books: Easy-to-learn, minimal API
+- :books: Easy-to-learn API
 - :coin: Cancellation Token support
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Setup](#setup)
 - [Quick Start](#quick-start)
 - [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
 - [Detailed Strategy Usage](#strategy)
 - [FAQ](#faq)
+
+## Dependencies
+
+ChainStrategy has one dependency on a single [Microsoft package](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions) that allows for integration into the universal dependency injection container.
 
 ## Installation
 
