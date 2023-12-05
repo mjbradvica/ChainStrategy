@@ -12,7 +12,7 @@ The advantages of ChainStrategy are:
 
 - :page_with_curl: Ready to go with minimal boilerplate
 - :heavy_check_mark: Easy unit testing
-- :arrow_down: Build with dependency injection in mind
+- :arrow_down: Built with dependency injection in mind
 - :foot: Small footprint
 - :books: Easy-to-learn API
 - :coin: Cancellation Token support
@@ -27,6 +27,7 @@ The advantages of ChainStrategy are:
 - [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
 - [Detailed Strategy Usage](#strategy)
 - [FAQ](#faq)
+- [Samples](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples)
 
 ## Dependencies
 
@@ -93,7 +94,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     {
     }
 
-    public override Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         request.Value += 10;
 
@@ -156,7 +157,7 @@ Create any handlers required by inheriting from the IStrategyHandler of T and K.
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 {
-    public async Task<MyResponse> Handle(MyRequest request)
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
@@ -229,7 +230,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     {
     }
 
-    public override Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         request.Value += 10;
 
@@ -255,7 +256,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
         _data = data;
     }
 
-    public override async Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override async Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         var myData = await _data.GetData();
 
@@ -281,7 +282,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
         _data = data;
     }
 
-    public override async Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override async Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -323,11 +324,11 @@ public abstract class SampleLoggingHandler<T> : ChainHandler<T>
     {
     }
 
-    public override Task<T> Middleware(T request)
+    public override Task<T> Middleware(T request, CancellationToken cancellationToken)
     {
         try
         {
-            return base.Middleware(request);
+            return base.Middleware(request, cancellationToken);
         }
         catch (Exception exception)
         {
@@ -402,7 +403,7 @@ public class MyHandlerTests
     {
         var handler = new MyHandler(null);
 
-        var result = await handler.Handle(new MyRequest());
+        var result = await handler.Handle(new MyRequest(), CancellationToken.None);
 
         Assert.AreEqual(expected, result);
     }
@@ -415,7 +416,7 @@ public class MyHandlerTests
 
         var handler = new MyHandler(null, mock.Object);
 
-        var result = await handler.Handle(new MyRequest());
+        var result = await handler.Handle(new MyRequest(), CancellationToken.None);
 
         Assert.AreEqual(expected, result);
     }
@@ -424,7 +425,8 @@ public class MyHandlerTests
     public async Task ServiceTestForFactory()
     {
         var mock = new Mock<IChainFactory<MyRequest>>();
-        mock.Setup(x => x.Execute(It.IsAny<MyRequest>())).ReturnsAsync(new MyHandler(null));
+        mock.Setup(x => x.Execute(It.IsAny<MyRequest>(), CancellationToken.None))
+            .ReturnsAsync(new MyRequest());
 
         var service = new MyService(mock.Object);
 
@@ -466,7 +468,7 @@ Implement the Handle method as required.
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 {
-    public async Task<MyResponse> Handle(MyRequest request)
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
@@ -487,7 +489,7 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
         _dependency = dependency;
     }
 
-    public async Task<MyResponse> Handle(MyRequest request)
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
