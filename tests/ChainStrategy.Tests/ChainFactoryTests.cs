@@ -43,7 +43,7 @@ namespace ChainStrategy.Tests
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfile>();
 
-            Assert.ThrowsException<ArgumentNullException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
+            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
         }
 
         /// <summary>

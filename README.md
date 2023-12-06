@@ -349,6 +349,47 @@ public class MyChainHandler : SampleLoggingHandler<MyChainRequest>
 }
 ```
 
+#### Handler Constraints
+
+You may reuse a handler in multiple chains by constraining the request type.
+
+```csharp
+interface IData
+{
+    Guid Id { get; }
+    void UpdateData(MyData data);
+}
+```
+
+```csharp
+public class MyChainRequest : IData
+{
+    // implement properties and methods
+}
+```
+
+Add the constraint the handler and implement as required.
+
+```csharp
+public class MyHandler : IChainHandler<MyChainRequest>
+{
+    public MyHandler(IChainHandler<MyChainRequest>? successor)
+        : base(successor)
+        {
+        }
+
+    public Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
+    {
+        if (request.id == Guid.Empty)
+        {
+            request.UpdateId(id);
+        }
+
+        return Task.FromResult(request);
+    }
+}
+```
+
 #### Building A Profile
 
 ChainStrategy uses Profiles to define what steps you want to use and in what order to use them.
