@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// Sample interface for a constrained handler.
     /// </summary>
-    public interface ISampleConstraint
+    public interface ISampleConstraint : IChainRequest
     {
         /// <summary>
         /// Gets the identifier.
