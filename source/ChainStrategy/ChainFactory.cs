@@ -40,7 +40,7 @@ namespace ChainStrategy
 
             if (!profile.ChainRegistrations.Any())
             {
-                throw new ArgumentNullException(nameof(profile.ChainRegistrations), "The profile does not have any steps registered.");
+                throw new NullReferenceException("The profile does not have any steps registered.");
             }
 
             _registrations = profile.ChainRegistrations.Reverse().ToList();

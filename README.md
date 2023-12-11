@@ -1,28 +1,37 @@
 # ChainStrategy
 
+An implementation of the Chain of Responsibility and Strategy patterns for .NET.
+
+![TempIcon](./images/tempIcon.jpg)
+
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
-
-## Table of Contents
-
-[Overview](#overview)
-[Installation](#installation)
-[Setup](#setup)
-[Quick Start](#quick-start)
-[Detailed Chain of Responsibility](#chain-of-responsibility)
-[Detailed Strategy](#strategy)
-[FAQ](#faq)
 
 ## Overview
 
-An implementation of the Chain of Responsibility and Strategy patterns for .NET.
-
 The advantages of ChainStrategy are:
 
-- Ready to go with minimal boilerplate
-- Easy unit testing
-- Build with dependency injection in mind
-- Small footprint
-- Easy-to-learn, minimal API
+- :page_with_curl: Ready to go with minimal boilerplate
+- :heavy_check_mark: Easy unit testing
+- :arrow_down: Built with dependency injection in mind
+- :foot: Small footprint
+- :books: Easy-to-learn API
+- :coin: Cancellation Token support
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Quick Start](#quick-start)
+- [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
+- [Detailed Strategy Usage](#strategy)
+- [FAQ](#faq)
+- [Samples](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples)
+
+## Dependencies
+
+ChainStrategy has one dependency on a single [Microsoft package](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection.Abstractions) that allows for integration into the universal dependency injection container.
 
 ## Installation
 
@@ -36,7 +45,7 @@ Install-Package ChainStrategy
 
 ## Setup
 
-ChainStrategy provides a built-in method for easy DependencyInjection with any DI container that is Microsoft compatible.
+ChainStrategy provides a built-in method for easy Dependency Injection with any DI container that is Microsoft compatible.
 
 ```csharp
 public class Program
@@ -52,7 +61,7 @@ public class Program
 }
 ```
 
-The method also accepts a params of Assemblies to register from if you need to add handlers and profiles from multiple assemblies.
+The method also accepts params of Assemblies to register from if you need to add handlers and profiles from multiple assemblies.
 
 ```csharp
 builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("SecondProject"));
@@ -73,7 +82,7 @@ public class MyChainRequest : ChainRequest
 }
 ```
 
-Create handlers that inherit from the ChainHandler of T, where T is the type of the your request object.
+Create handlers that inherit from the ChainHandler of T, where T is the type of your request object.
 
 Implement the DoWork method for each handler.
 
@@ -85,7 +94,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     {
     }
 
-    public override Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         request.Value += 10;
 
@@ -148,7 +157,7 @@ Create any handlers required by inheriting from the IStrategyHandler of T and K.
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 {
-    public async Task<MyResponse> Handle(MyRequest request)
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
@@ -221,7 +230,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     {
     }
 
-    public override Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         request.Value += 10;
 
@@ -247,7 +256,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
         _data = data;
     }
 
-    public override async Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override async Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         var myData = await _data.GetData();
 
@@ -260,7 +269,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 
 #### Aborting A Chain
 
-There may be conditions where your chain faults or must return early. There is a built-in way of returning a request back to the originator to avoid finishing the entire chain.
+There may be conditions where your chain faults or must return early. There is a built-in way of returning a request to the originator to avoid finishing the entire chain.
 
 ```csharp
 public class MyChainHandler : ChainHandler<MyChainRequest>
@@ -273,7 +282,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
         _data = data;
     }
 
-    public override async Task<MyChainRequest> DoWork(MyChainRequest request)
+    public override async Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -291,7 +300,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 }
 ```
 
-You may also pass an exception to the Faulted method if you'd like to log it.
+You may also pass an exception to the Faulted method if you'd like to log the object.
 
 ```csharp
     catch (Exception exception)
@@ -302,7 +311,7 @@ You may also pass an exception to the Faulted method if you'd like to log it.
 
 #### Using A Base Handler
 
-If you find yourself repeating yourself in multiple handlers you may create your own base handler to accomplish common tasks.
+If you find yourself repeating yourself in multiple handlers you may create a base handler to accomplish common tasks.
 
 The example shows an abstract handler that will override the Middleware method. Middleware just calls DoWork under the hood.
 
@@ -315,11 +324,11 @@ public abstract class SampleLoggingHandler<T> : ChainHandler<T>
     {
     }
 
-    public override Task<T> Middleware(T request)
+    public override Task<T> Middleware(T request, CancellationToken cancellationToken)
     {
         try
         {
-            return base.Middleware(request);
+            return base.Middleware(request, cancellationToken);
         }
         catch (Exception exception)
         {
@@ -337,6 +346,62 @@ Your handlers that need to use this can simply inherit from this class instead.
 public class MyChainHandler : SampleLoggingHandler<MyChainRequest>
 {
     // everything ele is the same as above.
+}
+```
+
+#### Handler Constraints
+
+You may reuse a handler in multiple chains by constraining the request type via an interface.
+
+```csharp
+interface IData : IChainRequest
+{
+    Guid Id { get; }
+
+    void UpdateData(MyData data);
+}
+```
+
+```csharp
+public class MyChainRequest : ChainRequest, IData
+{
+    // implement properties and methods
+}
+```
+
+Add the constraint handler and implement the interface accordingly.
+
+> Constrained handlers need to be abstract base handlers which utilize the generic constraint.
+
+```csharp
+public abstract class MyConstrainedHandler<T> : IChainHandler<T>
+    where T : IData
+{
+    public MyConstrainedHandler(IChainHandler<T>? successor)
+        : base(successor)
+        {
+        }
+
+    public Task<T> DoWork(T request, CancellationToken cancellationToken)
+    {
+        if (request.id == Guid.Empty)
+        {
+            request.UpdateId(id);
+        }
+
+        return Task.FromResult(request);
+    }
+}
+```
+
+Your concrete handler only needs to derive from the constrained base.
+
+```csharp
+public class MyHandler : MyConstrainedHandler<MyChainRequest>
+{
+    public MyHandler(IChainHandler<MyRequest>? handler)
+        : base(handler)
+        {}
 }
 ```
 
@@ -362,7 +427,7 @@ The library will execute each step in the order you define them.
 
 #### Usage
 
-Simply inject a IChainFactory of type T where T is your request when needed. Call the Execute method on the factory object to initiate your chain.
+Simply inject an IChainFactory of type T where T is your request when needed. Call the Execute method on the factory object to initiate your chain.
 
 ```csharp
 public class IMyService
@@ -394,7 +459,7 @@ public class MyHandlerTests
     {
         var handler = new MyHandler(null);
 
-        var result = await handler.Handle(new MyRequest());
+        var result = await handler.Handle(new MyRequest(), CancellationToken.None);
 
         Assert.AreEqual(expected, result);
     }
@@ -407,7 +472,7 @@ public class MyHandlerTests
 
         var handler = new MyHandler(null, mock.Object);
 
-        var result = await handler.Handle(new MyRequest());
+        var result = await handler.Handle(new MyRequest(), CancellationToken.None);
 
         Assert.AreEqual(expected, result);
     }
@@ -416,7 +481,8 @@ public class MyHandlerTests
     public async Task ServiceTestForFactory()
     {
         var mock = new Mock<IChainFactory<MyRequest>>();
-        mock.Setup(x => x.Execute(It.IsAny<MyRequest>())).ReturnsAsync(new MyHandler(null));
+        mock.Setup(x => x.Execute(It.IsAny<MyRequest>(), CancellationToken.None))
+            .ReturnsAsync(new MyRequest());
 
         var service = new MyService(mock.Object);
 
@@ -458,7 +524,7 @@ Implement the Handle method as required.
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 {
-    public async Task<MyResponse> Handle(MyRequest request)
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
@@ -479,7 +545,7 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
         _dependency = dependency;
     }
 
-    public async Task<MyResponse> Handle(MyRequest request)
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
@@ -537,7 +603,7 @@ public class MyService
 
 ### Do I need a Chain of Responsibility?
 
-Do you have a complex process that can be broken up in to multiple steps to enable easier development and testing?
+Do you have a complex process that can be broken up into multiple steps to enable easier development and testing?
 
 ### Do I need a Strategy?
 
@@ -549,11 +615,11 @@ It is best to think of a Strategy as a complex switch statement where each switc
 
 ### How is either different from a Mediator?
 
-A Mediator is a 1:1 relationship between a request and reply with a single handler per request.
+A Mediator is a 1:1 relationship between a request and a response with a single handler per request.
 
-A Chain of Responsibility is 1:M relationship with multiple handlers per request in a specific order.
+A Chain of Responsibility is a One-To-Many relationship with multiple handlers per request in a specific order.
 
-A Strategy is 1:M relationship with a single handler chosen depending on a predicate.
+A Strategy is a One-To-Many relationship with a single handler chosen depending on a predicate.
 
 ### Can I use them together?
 
@@ -563,4 +629,4 @@ Yes! You can use any or all three in conjunction. None of them are mutually excl
 
 A Chain of Responsibility is a **medium usage** pattern. It is best used when you need to break a problem down into smaller easier-to-test chunks.
 
-A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of a algorithm that uses the same interface.
+A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of an algorithm that uses the same interface.

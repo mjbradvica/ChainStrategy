@@ -1,8 +1,10 @@
-name: main
+name: Build & Test
 
 on:
   push:
-    branches: [master]
+    branches-ignore:
+      - master
+  pull_request:
 
 jobs:
   build:
@@ -42,9 +44,3 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --verbosity normal -c Release
-
-      - name: Pack
-        run: dotnet pack --no-build -c Release -o .
-
-      # - name: Publish
-      #   run: dotnet nuget push ChainStrategy.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} --skip-duplicate
