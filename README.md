@@ -103,7 +103,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 }
 ```
 
-Create a profile for a chain that inherits the ChainProfile class. Add steps in the constructor.
+Create a profile for a chain that inherits the ChainProfile of type T where T is your request object class. Add steps in the constructor.
 
 ```csharp
 public class MyProfile : ChainProfile<MyChainRequest>
@@ -251,7 +251,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     private readonly IMyDataSource _data;
 
     public MyChainHandler(IChainHandler<MyChainRequest>? handler, IMyDataSource data)
-    : base(handler)
+        : base(handler)
     {
         _data = data;
     }
@@ -353,8 +353,10 @@ public class MyChainHandler : SampleLoggingHandler<MyChainRequest>
 
 You may reuse a handler in multiple chains by constraining the request type via an interface.
 
+> The interface needs to inherit from the "IChainRequest" interface even if you rely on the default implementation.
+
 ```csharp
-interface IData : IChainRequest
+public interface IData : IChainRequest
 {
     Guid Id { get; }
 
@@ -374,15 +376,15 @@ Add the constraint handler and implement the interface accordingly.
 > Constrained handlers need to be abstract base handlers which utilize the generic constraint.
 
 ```csharp
-public abstract class MyConstrainedHandler<T> : IChainHandler<T>
+public abstract class MyConstrainedHandler<T> : ChainHandler<T>
     where T : IData
 {
-    public MyConstrainedHandler(IChainHandler<T>? successor)
+    protected MyConstrainedHandler(IChainHandler<T>? successor)
         : base(successor)
         {
         }
 
-    public Task<T> DoWork(T request, CancellationToken cancellationToken)
+    public override Task<T> DoWork(T request, CancellationToken cancellationToken)
     {
         if (request.id == Guid.Empty)
         {
@@ -615,7 +617,7 @@ It is best to think of a Strategy as a complex switch statement where each switc
 
 ### How is either different from a Mediator?
 
-A Mediator is a 1:1 relationship between a request and a response with a single handler per request.
+A Mediator is a One-To-One relationship between a request and a response with a single handler per request.
 
 A Chain of Responsibility is a One-To-Many relationship with multiple handlers per request in a specific order.
 
