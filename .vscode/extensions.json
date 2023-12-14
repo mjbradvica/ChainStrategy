@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "znck.grammarly",
+        "streetsidesoftware.code-spell-checker",
+        "editorconfig.editorconf",
+        "davidanson.vscode-markdownlint"
+    ]
+}
