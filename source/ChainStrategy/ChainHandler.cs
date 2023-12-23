@@ -39,7 +39,7 @@ namespace ChainStrategy
         }
 
         /// <summary>
-        /// Implementation method for each handler to perform its' unique logic.
+        /// Implementation method for each handler to perform its unique logic.
         /// </summary>
         /// <param name="request">The request for the chain.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>

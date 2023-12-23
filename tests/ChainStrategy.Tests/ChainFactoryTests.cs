@@ -27,7 +27,7 @@ namespace ChainStrategy.Tests
         }
 
         /// <summary>
-        /// Factory will thrown an exception when no profiles are found for a given request.
+        /// Factory will throw an exception when no profiles are found for a given request.
         /// </summary>
         [TestMethod]
         public void Handler_NullProfile_ThrowsException()

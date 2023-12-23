@@ -10,7 +10,7 @@ namespace ChainStrategy
     public sealed class Nothing
     {
         /// <summary>
-        /// An instance ot Nothing to represent void.
+        /// An instance of Nothing to represent void.
         /// </summary>
         public static readonly Nothing Value = default!;
     }

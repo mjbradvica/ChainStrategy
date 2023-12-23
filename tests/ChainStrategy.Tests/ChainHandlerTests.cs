@@ -48,7 +48,7 @@ namespace ChainStrategy.Tests
         }
 
         /// <summary>
-        /// Tests to ensure on a valid request with a initialized next handler is processed correctly.
+        /// Tests to ensure on a valid request with an initialized next handler is processed correctly.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
