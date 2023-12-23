@@ -1,8 +1,8 @@
 # ChainStrategy
 
-An implementation of the Chain of Responsibility and Strategy patterns for .NET.
+An implementation of the Chain of Responsibility and Strategy patterns for dotnet.
 
-![TempIcon](./images/tempIcon.jpg)
+![TempIcon](./images/logo-web.png)
 
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
@@ -35,7 +35,7 @@ ChainStrategy has one dependency on a single [Microsoft package](https://www.nug
 
 ## Installation
 
-The easiest way is [install with NuGet](https://www.nuget.org/).
+The easiest way is to use [NuGet](https://www.nuget.org/) for installation.
 
 Install where you need with:
 
@@ -45,7 +45,7 @@ Install-Package ChainStrategy
 
 ## Setup
 
-ChainStrategy provides a built-in method for easy DependencyInjection with any DI container that is Microsoft compatible.
+ChainStrategy provides a built-in method for easy Dependency Injection with any DI container that is Microsoft compatible.
 
 ```csharp
 public class Program
@@ -61,7 +61,7 @@ public class Program
 }
 ```
 
-The method also accepts a params of Assemblies to register from if you need to add handlers and profiles from multiple assemblies.
+The method also accepts params of Assemblies to register from if you need to add handlers and profiles from multiple assemblies.
 
 ```csharp
 builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("SecondProject"));
@@ -82,7 +82,7 @@ public class MyChainRequest : ChainRequest
 }
 ```
 
-Create handlers that inherit from the ChainHandler of T, where T is the type of the your request object.
+Create handlers that inherit from the ChainHandler of T, where T is the type of your request object.
 
 Implement the DoWork method for each handler.
 
@@ -103,7 +103,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 }
 ```
 
-Create a profile for a chain that inherits the ChainProfile class. Add steps in the constructor.
+Create a profile for a chain that inherits the ChainProfile of type T where T is your request object class. Add steps in the constructor.
 
 ```csharp
 public class MyProfile : ChainProfile<MyChainRequest>
@@ -251,7 +251,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     private readonly IMyDataSource _data;
 
     public MyChainHandler(IChainHandler<MyChainRequest>? handler, IMyDataSource data)
-    : base(handler)
+        : base(handler)
     {
         _data = data;
     }
@@ -269,7 +269,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 
 #### Aborting A Chain
 
-There may be conditions where your chain faults or must return early. There is a built-in way of returning a request back to the originator to avoid finishing the entire chain.
+There may be conditions where your chain faults or must return early. There is a built-in way of returning a request to the originator to avoid finishing the entire chain.
 
 ```csharp
 public class MyChainHandler : ChainHandler<MyChainRequest>
@@ -300,7 +300,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 }
 ```
 
-You may also pass an exception to the Faulted method if you'd like to log it.
+You may also pass an exception to the Faulted method if you'd like to log the object.
 
 ```csharp
     catch (Exception exception)
@@ -311,7 +311,7 @@ You may also pass an exception to the Faulted method if you'd like to log it.
 
 #### Using A Base Handler
 
-If you find yourself repeating yourself in multiple handlers you may create your own base handler to accomplish common tasks.
+If you find yourself repeating yourself in multiple handlers you may create a base handler to accomplish common tasks.
 
 The example shows an abstract handler that will override the Middleware method. Middleware just calls DoWork under the hood.
 
@@ -351,34 +351,40 @@ public class MyChainHandler : SampleLoggingHandler<MyChainRequest>
 
 #### Handler Constraints
 
-You may reuse a handler in multiple chains by constraining the request type.
+You may reuse a handler in multiple chains by constraining the request type via an interface.
+
+> The interface needs to inherit from the "IChainRequest" interface even if you rely on the default implementation.
 
 ```csharp
-interface IData
+public interface IData : IChainRequest
 {
     Guid Id { get; }
+
     void UpdateData(MyData data);
 }
 ```
 
 ```csharp
-public class MyChainRequest : IData
+public class MyChainRequest : ChainRequest, IData
 {
     // implement properties and methods
 }
 ```
 
-Add the constraint the handler and implement as required.
+Add the constraint handler and implement the interface accordingly.
+
+> Constrained handlers need to be abstract base handlers which utilize the generic constraint.
 
 ```csharp
-public class MyHandler : IChainHandler<MyChainRequest>
+public abstract class MyConstrainedHandler<T> : ChainHandler<T>
+    where T : IData
 {
-    public MyHandler(IChainHandler<MyChainRequest>? successor)
+    protected MyConstrainedHandler(IChainHandler<T>? successor)
         : base(successor)
         {
         }
 
-    public Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
+    public override Task<T> DoWork(T request, CancellationToken cancellationToken)
     {
         if (request.id == Guid.Empty)
         {
@@ -387,6 +393,17 @@ public class MyHandler : IChainHandler<MyChainRequest>
 
         return Task.FromResult(request);
     }
+}
+```
+
+Your concrete handler only needs to derive from the constrained base.
+
+```csharp
+public class MyHandler : MyConstrainedHandler<MyChainRequest>
+{
+    public MyHandler(IChainHandler<MyRequest>? handler)
+        : base(handler)
+        {}
 }
 ```
 
@@ -412,7 +429,7 @@ The library will execute each step in the order you define them.
 
 #### Usage
 
-Simply inject a IChainFactory of type T where T is your request when needed. Call the Execute method on the factory object to initiate your chain.
+Simply inject an IChainFactory of type T where T is your request when needed. Call the Execute method on the factory object to initiate your chain.
 
 ```csharp
 public class IMyService
@@ -588,7 +605,7 @@ public class MyService
 
 ### Do I need a Chain of Responsibility?
 
-Do you have a complex process that can be broken up in to multiple steps to enable easier development and testing?
+Do you have a complex process that can be broken up into multiple steps to enable easier development and testing?
 
 ### Do I need a Strategy?
 
@@ -600,11 +617,11 @@ It is best to think of a Strategy as a complex switch statement where each switc
 
 ### How is either different from a Mediator?
 
-A Mediator is a 1:1 relationship between a request and reply with a single handler per request.
+A Mediator is a One-To-One relationship between a request and a response with a single handler per request.
 
-A Chain of Responsibility is 1:M relationship with multiple handlers per request in a specific order.
+A Chain of Responsibility is a One-To-Many relationship with multiple handlers per request in a specific order.
 
-A Strategy is 1:M relationship with a single handler chosen depending on a predicate.
+A Strategy is a One-To-Many relationship with a single handler chosen depending on a predicate.
 
 ### Can I use them together?
 
@@ -614,4 +631,4 @@ Yes! You can use any or all three in conjunction. None of them are mutually excl
 
 A Chain of Responsibility is a **medium usage** pattern. It is best used when you need to break a problem down into smaller easier-to-test chunks.
 
-A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of a algorithm that uses the same interface.
+A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of an algorithm that uses the same interface.

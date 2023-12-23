@@ -34,6 +34,12 @@ namespace ChainStrategy.Samples
             var strategyResult = await strategyFactory.Execute(new SampleStrategyRequest());
 
             Console.WriteLine(strategyResult.Value);
+
+            var constrainedFactory = provider.GetRequiredService<IChainFactory<SampleConstrainedRequest>>();
+
+            var constrainedRequest = await constrainedFactory.Execute(new SampleConstrainedRequest());
+
+            Console.WriteLine(constrainedRequest.Id);
         }
     }
 }
