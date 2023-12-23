@@ -1,8 +1,8 @@
 # ChainStrategy
 
-An implementation of the Chain of Responsibility and Strategy patterns for .NET.
+An implementation of the Chain of Responsibility and Strategy patterns for dotnet.
 
-![TempIcon](./images/tempIcon.jpg)
+![TempIcon](./images/logo-web.png)
 
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
@@ -35,7 +35,7 @@ ChainStrategy has one dependency on a single [Microsoft package](https://www.nug
 
 ## Installation
 
-The easiest way is [install with NuGet](https://www.nuget.org/).
+The easiest way is to use [NuGet](https://www.nuget.org/) for installation.
 
 Install where you need with:
 
