@@ -24,6 +24,8 @@ The advantages of ChainStrategy are:
 - [Installation](#installation)
 - [Setup](#setup)
 - [Quick Start](#quick-start)
+  - [Quick Chain](#quick-chain-of-responsibility)
+  - [Quick Strategy](#quick-strategy)
 - [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
 - [Detailed Strategy Usage](#strategy)
 - [FAQ](#faq)
@@ -277,7 +279,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     private readonly IMyDataSource _data;
 
     public MyChainHandler(IChainHandler<MyChainRequest>? handler, IMyDataSource data)
-    : base(handler)
+        : base(handler)
     {
         _data = data;
     }
