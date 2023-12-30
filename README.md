@@ -1,8 +1,8 @@
 # ChainStrategy
 
-An implementation of the Chain of Responsibility and Strategy patterns for dotnet.
+An implementation of the Chain of Responsibility and Strategy patterns for the dotnet platform.
 
-![TempIcon](./images/logo-web.png)
+![TempIcon](https://i.imgur.com/LMX4jJf.png)
 
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
@@ -24,6 +24,8 @@ The advantages of ChainStrategy are:
 - [Installation](#installation)
 - [Setup](#setup)
 - [Quick Start](#quick-start)
+  - [Quick Chain](#quick-chain-of-responsibility)
+  - [Quick Strategy](#quick-strategy)
 - [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
 - [Detailed Strategy Usage](#strategy)
 - [FAQ](#faq)
@@ -35,7 +37,7 @@ ChainStrategy has one dependency on a single [Microsoft package](https://www.nug
 
 ## Installation
 
-The easiest way is to use [NuGet](https://www.nuget.org/) for installation.
+The easiest way to get started is to: [Install with NuGet](https://www.nuget.org/).
 
 Install where you need with:
 
@@ -277,7 +279,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
     private readonly IMyDataSource _data;
 
     public MyChainHandler(IChainHandler<MyChainRequest>? handler, IMyDataSource data)
-    : base(handler)
+        : base(handler)
     {
         _data = data;
     }
