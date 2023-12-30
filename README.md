@@ -2,7 +2,7 @@
 
 An implementation of the Chain of Responsibility and Strategy patterns for .NET.
 
-![TempIcon](./images/tempIcon.jpg)
+![TempIcon](https://i.imgur.com/LMX4jJf.png)
 
 ![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
