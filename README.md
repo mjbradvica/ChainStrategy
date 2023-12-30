@@ -330,7 +330,7 @@ public abstract class SampleLoggingHandler<T> : ChainHandler<T>
     {
         try
         {
-            return base.Middleware(request, cancellationToken);
+            return base.DoWork(request, cancellationToken);
         }
         catch (Exception exception)
         {
