@@ -14,23 +14,25 @@ namespace ChainStrategy
     /// <summary>
     /// Attempts to create a chain of responsibility for a given request object.
     /// </summary>
-    /// <typeparam name="TRequest">The request object for the chain being created.</typeparam>
-    public sealed class ChainFactory<TRequest> : IChainFactory<TRequest>
-        where TRequest : IChainRequest
+    public sealed class ChainFactory : IChainFactory
     {
-        private readonly IList<Type> _registrations;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IChainHandler<TRequest> _handler;
+        private IList<Type> _registrations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainFactory{TRequest}"/> class.
+        /// Initializes a new instance of the <see cref="ChainFactory"/> class.
         /// </summary>
         /// <param name="serviceProvider">A service provider to extract dependencies from.</param>
         public ChainFactory(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _registrations = new List<Type>();
+        }
 
+        /// <inheritdoc/>
+        public async Task<TRequest> Execute<TRequest>(TRequest request, CancellationToken cancellationToken)
+            where TRequest : IChainRequest
+        {
             var profile = _serviceProvider.GetService<ChainProfile<TRequest>>();
 
             if (profile == null)
@@ -45,25 +47,18 @@ namespace ChainStrategy
 
             _registrations = profile.ChainRegistrations.Reverse().ToList();
 
-            var (handler, _) = InstantiateHandlers(null, 0);
+            var (handler, _) = InstantiateHandlers<TRequest>(null, 0);
 
             if (handler != null)
             {
-                _handler = handler;
+                return await handler.Handle(request, cancellationToken);
             }
-            else
-            {
-                throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
-            }
+
+            throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
         }
 
-        /// <inheritdoc/>
-        public async Task<TRequest> Execute(TRequest request, CancellationToken cancellationToken)
-        {
-            return await _handler.Handle(request, cancellationToken);
-        }
-
-        private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers(IChainHandler<TRequest>? handler, int index)
+        private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers<TRequest>(IChainHandler<TRequest>? handler, int index)
+            where TRequest : IChainRequest
         {
             if (index == _registrations.Count)
             {

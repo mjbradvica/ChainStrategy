@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ChainStrategy.Tests
 {
     /// <summary>
-    /// Tests the <see cref="ChainFactory{TRequest}"/> class capabilities.
+    /// Tests the <see cref="ChainFactory"/> class capabilities.
     /// </summary>
     [TestClass]
     public class ChainFactoryTests
@@ -29,21 +29,27 @@ namespace ChainStrategy.Tests
         /// <summary>
         /// Factory will throw an exception when no profiles are found for a given request.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public void Handler_NullProfile_ThrowsException()
+        public async Task Handler_NullProfile_ThrowsException()
         {
-            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
+            var factory = new ChainFactory(_collection.BuildServiceProvider());
+
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainRequest(), CancellationToken.None));
         }
 
         /// <summary>
         /// Factory will throw an exception when no registrations are present in a profile.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public void Handler_NoRegistrations_ThrowsException()
+        public async Task Handler_NoRegistrations_ThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfile>();
 
-            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
+            var factory = new ChainFactory(_collection.BuildServiceProvider());
+
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -56,7 +62,7 @@ namespace ChainStrategy.Tests
             _collection.AddTransient<TestChainDependency>();
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithDependentHandlers>();
 
-            var factory = new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider());
+            var factory = new ChainFactory(_collection.BuildServiceProvider());
 
             var result = await factory.Execute(new TestChainRequest(), CancellationToken.None);
 
@@ -66,23 +72,29 @@ namespace ChainStrategy.Tests
         /// <summary>
         /// Factory throws an exception when a handler does not have a public constructor.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public void Handler_HandlerWithNoPublicConstructorThrowsException()
+        public async Task Handler_HandlerWithNoPublicConstructorThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithBadHandler>();
 
-            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
+            var factory = new ChainFactory(_collection.BuildServiceProvider());
+
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainRequest(), CancellationToken.None));
         }
 
         /// <summary>
         /// Factory throws an exception when a handler dependency is not registered.
         /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public void Handler_DependencyNotRegistered_ThrowsException()
+        public async Task Handler_DependencyNotRegistered_ThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainRequest>, TestChainProfileWithDependentHandlers>();
 
-            Assert.ThrowsException<NullReferenceException>(() => new ChainFactory<TestChainRequest>(_collection.BuildServiceProvider()));
+            var factory = new ChainFactory(_collection.BuildServiceProvider());
+
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainRequest(), CancellationToken.None));
         }
     }
 }

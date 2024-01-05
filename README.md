@@ -37,7 +37,7 @@ ChainStrategy has one dependency on a single [Microsoft package](https://www.nug
 
 ## Installation
 
-The easiest way to get started is to: [Install with NuGet](https://www.nuget.org/).
+The easiest way to get started is to: [Install with NuGet](https://www.nuget.org/packages/ChainStrategy/).
 
 Install where you need with:
 
@@ -105,7 +105,7 @@ public class MyChainHandler : ChainHandler<MyChainRequest>
 }
 ```
 
-Create a profile for a chain that inherits the ChainProfile of type T where T is your request object class. Add steps in the constructor.
+Create a profile for a chain that inherits from the ChainProfile of type T where T is your request object class. Add steps in the constructor.
 
 ```csharp
 public class MyProfile : ChainProfile<MyChainRequest>

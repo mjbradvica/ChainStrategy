@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ChainStrategy.Tests
 {
     /// <summary>
-    /// Test the <see cref="StrategyFactory{TStrategyRequest,TStrategyResponse}"/> class capabilities.
+    /// Test the <see cref="StrategyFactory"/> class capabilities.
     /// </summary>
     [TestClass]
     public class StrategyFactoryTests
@@ -33,12 +33,11 @@ namespace ChainStrategy.Tests
         [TestMethod]
         public async Task ExecuteStrategy_NoMatchingKeys_ThrowsException()
         {
-            _serviceCollection
-                .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, EmptyChainStrategyProfile>();
+            _serviceCollection.AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, EmptyChainStrategyProfile>();
 
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace ChainStrategy.Tests
         [TestMethod]
         public async Task ExecuteStrategy_NoProfile_ThrowsException()
         {
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
             await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
@@ -63,7 +62,7 @@ namespace ChainStrategy.Tests
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, TestStrategyProfile>();
 
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
             var result = await factory.Execute(new TestStrategyRequest(), CancellationToken.None);
 
@@ -80,7 +79,7 @@ namespace ChainStrategy.Tests
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, DefaultOnlyStrategyProfile>();
 
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
             var result = await factory.Execute(new TestStrategyRequest(), CancellationToken.None);
 
@@ -97,7 +96,7 @@ namespace ChainStrategy.Tests
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileBadConstructor>();
 
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
             await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
@@ -112,7 +111,7 @@ namespace ChainStrategy.Tests
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileWithDependentHandler>();
 
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
             await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
@@ -128,7 +127,7 @@ namespace ChainStrategy.Tests
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileWithDependentHandler>();
 
-            var factory = new StrategyFactory<TestStrategyRequest, TestStrategyResponse>(_serviceCollection.BuildServiceProvider());
+            var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
             var result = await factory.Execute(new TestStrategyRequest(), CancellationToken.None);
 
