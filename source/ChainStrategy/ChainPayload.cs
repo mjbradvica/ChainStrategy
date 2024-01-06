@@ -1,4 +1,4 @@
-﻿// <copyright file="ChainRequest.cs" company="Michael Bradvica LLC">
+﻿// <copyright file="ChainPayload.cs" company="Michael Bradvica LLC">
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
@@ -7,9 +7,9 @@ using System;
 namespace ChainStrategy
 {
     /// <summary>
-    /// An abstract chain request that has basic properties and methods for a chain process.
+    /// An abstract chain payload that has basic properties and methods for a chain process.
     /// </summary>
-    public abstract class ChainRequest : IChainRequest
+    public abstract class ChainPayload : IChainPayload
     {
         /// <inheritdoc/>
         public bool IsFaulted { get; private set; }

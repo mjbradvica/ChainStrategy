@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// An example chain profile.
     /// </summary>
-    internal class SampleChainProfile : ChainProfile<SampleChainRequest>
+    internal class SampleChainProfile : ChainProfile<SampleChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleChainProfile"/> class.

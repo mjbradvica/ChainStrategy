@@ -9,7 +9,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// </summary>
     /// <typeparam name="T">The type of the request object.</typeparam>
     public abstract class SampleLoggingHandler<T> : ChainHandler<T>
-        where T : ChainRequest
+        where T : ChainPayload
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleLoggingHandler{T}"/> class.

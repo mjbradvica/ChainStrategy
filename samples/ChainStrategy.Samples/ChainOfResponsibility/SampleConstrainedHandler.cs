@@ -7,13 +7,13 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// Sample defined constrained handler.
     /// </summary>
-    public class SampleConstrainedHandler : SampleBaseConstrainedHandler<SampleConstrainedRequest>
+    public class SampleConstrainedHandler : SampleBaseConstrainedHandler<SampleConstrainedPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleConstrainedHandler"/> class.
         /// </summary>
         /// <param name="handler">The successor handler.</param>
-        public SampleConstrainedHandler(IChainHandler<SampleConstrainedRequest>? handler)
+        public SampleConstrainedHandler(IChainHandler<SampleConstrainedPayload>? handler)
             : base(handler)
         {
         }

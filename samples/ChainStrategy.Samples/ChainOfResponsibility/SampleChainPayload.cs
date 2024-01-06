@@ -1,19 +1,19 @@
-﻿// <copyright file="SampleChainRequest.cs" company="Michael Bradvica LLC">
+﻿// <copyright file="SampleChainPayload.cs" company="Michael Bradvica LLC">
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
 namespace ChainStrategy.Samples.ChainOfResponsibility
 {
     /// <summary>
-    /// A sample chain request to highlight the library.
+    /// A sample chain payload to highlight the library.
     /// </summary>
-    internal class SampleChainRequest : ChainRequest
+    internal class SampleChainPayload : ChainPayload
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SampleChainRequest"/> class.
+        /// Initializes a new instance of the <see cref="SampleChainPayload"/> class.
         /// </summary>
-        /// <param name="initialValue">The initial value of the request.</param>
-        public SampleChainRequest(int initialValue = 1)
+        /// <param name="initialValue">The initial value of the payload.</param>
+        public SampleChainPayload(int initialValue = 1)
         {
             Value = initialValue;
         }

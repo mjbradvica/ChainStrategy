@@ -23,11 +23,12 @@ The advantages of ChainStrategy are:
 - [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Setup](#setup)
-- [Quick Start](#quick-start)
-  - [Quick Chain](#quick-chain-of-responsibility)
-  - [Quick Strategy](#quick-strategy)
-- [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
-- [Detailed Strategy Usage](#strategy)
+- [Chain of Responsibility](#chain-of-responsibility)
+  - [Quick Start for Chains](#quick-start-for-chain-of-responsibility)
+  - [Detailed Usage for Chains](#detailed-usage-for-chain-of-responsibility)
+- [Strategy](#strategy)
+  - [Quick Start for Strategies](#quick-start-for-strategy)
+  - [Detailed Usage for Strategies](#detailed-usage-for-strategies)
 - [FAQ](#faq)
 - [Samples](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples)
 
@@ -69,20 +70,22 @@ The method also accepts params of Assemblies to register from if you need to add
 builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("SecondProject"));
 ```
 
-### Quick Start
+## Chain of Responsibility
 
-#### Quick Chain of Responsibility
+### Quick Start for Chain of Responsibility
 
 Create a request object that inherits from the ChainRequest base class.
 
 ```csharp
 public class MyChainRequest : ChainRequest
 {
-    public int Value { get; set; }
+    public int InitialValue { get; set; }
 
-    // potentially lots of properties here.
+    public int FinalValue { get; set; }
 }
 ```
+
+> Your request object should contain all data necessary for a chain, including initial, temporary, and final values. Chains do NOT have separate response objects.
 
 Create handlers that inherit from the ChainHandler of T, where T is the type of your request object.
 
@@ -124,9 +127,9 @@ Start a chain by injecting an IChainFactory of type T into a service. Call the E
 ```csharp
 public class IMyService
 {
-    private readonly IChainFactory<MyRequest> _chainFactory;
+    private readonly IChainFactory _chainFactory;
 
-    public IMyService(IChainFactory<MyRequest> chainFactory)
+    public IMyService(IChainFactory chainFactory)
     {
         _chainFactory = chainFactory;
     }
@@ -138,72 +141,7 @@ public class IMyService
 }
 ```
 
-#### Quick Strategy
-
-Create a request and response object for a strategy. The request object must inherit from the IStrategyRequest object of type T, where T is the type of the response object.
-
-```csharp
-public class MyResponse
-{
-    public int MyResult { get; set; }
-}
-
-public class MyRequest : IStrategyRequest<MyResponse>
-{
-    // properties in here
-}
-```
-
-Create any handlers required by inheriting from the IStrategyHandler of T and K. Where T is the type of the request object and K is the type of the response object.
-
-```csharp
-public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
-{
-    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
-    {
-        // implement and return response
-    }
-}
-```
-
-Create a profile by inheriting from the StrategyProfile of type T and K. Where T is the type of the request object and K is the type of the response object.
-
-Add predicate conditions for each handler. Use the AddDefault for a default.
-
-```csharp
-public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
-{
-    public MyStrategyProfile()
-    {
-        AddStrategy<MyFirstHandler>(request => request.Value > 10);
-        AddStrategy<MySecondHandler>(request => request.Value == 0);
-        AddDefault<MyDefaultHandler>();
-    }
-}
-```
-
-Start a strategy by injecting an IStrategyFactory of type T and K. Where T is the type of the request object and K is the type of the response object.
-
-Call the Execute method and pass a request object.
-
-```csharp
-public class MyService
-{
-    private readonly IStrategyFactory<MyRequest, MyResponse> _strategyFactory;
-
-    public MyService(IStrategyFactory<MyRequest, MyResponse> strategyFactory)
-    {
-        _strategyFactory = strategyFactory;
-    }
-
-    public async Task Handle()
-    {
-        var result = await _strategyFactory.Execute(new MyRequest());
-    }
-}
-```
-
-### Chain of Responsibility
+### Detailed Usage for Chain of Responsibility
 
 #### Chain Request
 
@@ -497,7 +435,74 @@ public class MyHandlerTests
 }
 ```
 
-### Strategy
+#### Quick Strategy
+
+Create a request and response object for a strategy. The request object must inherit from the IStrategyRequest object of type T, where T is the type of the response object.
+
+```csharp
+public class MyResponse
+{
+    public int MyResult { get; set; }
+}
+
+public class MyRequest : IStrategyRequest<MyResponse>
+{
+    // properties in here
+}
+```
+
+Create any handlers required by inheriting from the IStrategyHandler of T and K. Where T is the type of the request object and K is the type of the response object.
+
+```csharp
+public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
+{
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
+    {
+        // implement and return response
+    }
+}
+```
+
+Create a profile by inheriting from the StrategyProfile of type T and K. Where T is the type of the request object and K is the type of the response object.
+
+Add predicate conditions for each handler. Use the AddDefault for a default.
+
+```csharp
+public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
+{
+    public MyStrategyProfile()
+    {
+        AddStrategy<MyFirstHandler>(request => request.Value > 10);
+        AddStrategy<MySecondHandler>(request => request.Value == 0);
+        AddDefault<MyDefaultHandler>();
+    }
+}
+```
+
+Start a strategy by injecting an IStrategyFactory of type T and K. Where T is the type of the request object and K is the type of the response object.
+
+Call the Execute method and pass a request object.
+
+```csharp
+public class MyService
+{
+    private readonly IStrategyFactory<MyRequest, MyResponse> _strategyFactory;
+
+    public MyService(IStrategyFactory<MyRequest, MyResponse> strategyFactory)
+    {
+        _strategyFactory = strategyFactory;
+    }
+
+    public async Task Handle()
+    {
+        var result = await _strategyFactory.Execute(new MyRequest());
+    }
+}
+```
+
+## Strategy
+
+### Quick Start for Strategy
 
 #### Request and Response
 
@@ -602,6 +607,8 @@ public class MyService
     }
 }
 ```
+
+### Detailed Usage for Strategies
 
 ## FAQ
 

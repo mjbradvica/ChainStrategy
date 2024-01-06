@@ -49,7 +49,7 @@ namespace ChainStrategy.Registration
                 {
                     if (implementationType.BaseType != null)
                     {
-                        services.AddTransient(implementationType.BaseType, implementationType);
+                        services.AddSingleton(implementationType.BaseType, implementationType);
                     }
                 });
         }

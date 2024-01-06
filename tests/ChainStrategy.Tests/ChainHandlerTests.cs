@@ -23,7 +23,7 @@ namespace ChainStrategy.Tests
         {
             var handler = new TestChainHandler(null);
 
-            var request = new TestChainRequest();
+            var request = new TestChainPayload();
             request.Faulted();
 
             var result = await handler.Handle(request, CancellationToken.None);
@@ -40,7 +40,7 @@ namespace ChainStrategy.Tests
         {
             var handler = new TestChainHandler(null);
 
-            var request = new TestChainRequest();
+            var request = new TestChainPayload();
 
             var result = await handler.Handle(request, CancellationToken.None);
 
@@ -56,7 +56,7 @@ namespace ChainStrategy.Tests
         {
             var handler = new TestChainHandler(new TestChainHandler(null));
 
-            var request = new TestChainRequest();
+            var request = new TestChainPayload();
 
             var result = await handler.Handle(request, CancellationToken.None);
 

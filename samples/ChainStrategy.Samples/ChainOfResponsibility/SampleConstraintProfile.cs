@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// Sample constrained profile.
     /// </summary>
-    internal class SampleConstraintProfile : ChainProfile<SampleConstrainedRequest>
+    internal class SampleConstraintProfile : ChainProfile<SampleConstrainedPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleConstraintProfile"/> class.

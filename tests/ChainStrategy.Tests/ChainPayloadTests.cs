@@ -1,4 +1,4 @@
-﻿// <copyright file="ChainRequestTests.cs" company="Michael Bradvica LLC">
+﻿// <copyright file="ChainPayloadTests.cs" company="Michael Bradvica LLC">
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
@@ -8,10 +8,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ChainStrategy.Tests
 {
     /// <summary>
-    /// Tests for the abstract <see cref="ChainRequest"/> class.
+    /// Tests for the abstract <see cref="ChainPayload"/> class.
     /// </summary>
     [TestClass]
-    public class ChainRequestTests
+    public class ChainPayloadTests
     {
         /// <summary>
         /// Ensures the correct property values after the Faulted method is called.
@@ -19,7 +19,7 @@ namespace ChainStrategy.Tests
         [TestMethod]
         public void Faulted_HasCorrectProperties()
         {
-            var request = new TestChainRequest();
+            var request = new TestChainPayload();
 
             request.Faulted();
 
@@ -35,7 +35,7 @@ namespace ChainStrategy.Tests
         {
             var exception = new ArgumentNullException();
 
-            var request = new TestChainRequest();
+            var request = new TestChainPayload();
 
             request.Faulted(exception);
 

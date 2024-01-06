@@ -10,23 +10,23 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A handler for unit testing with no public constructor.
     /// </summary>
-    internal class TestHandlerNonPublicConstructor : IChainHandler<TestChainRequest>
+    internal class TestHandlerNonPublicConstructor : IChainHandler<TestChainPayload>
     {
         private TestHandlerNonPublicConstructor()
         {
         }
 
         /// <summary>
-        /// Performs an operation on a request object.
+        /// Performs an operation on a payload object.
         /// </summary>
-        /// <param name="request">The request object for the method.</param>
+        /// <param name="payload">The payload object for the method.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
-        /// <returns>The same request object post-operation.</returns>
-        public Task<TestChainRequest> Handle(TestChainRequest request, CancellationToken cancellationToken)
+        /// <returns>The same payload object post-operation.</returns>
+        public Task<TestChainPayload> Handle(TestChainPayload payload, CancellationToken cancellationToken)
         {
-            ++request.Value;
+            ++payload.Value;
 
-            return Task.FromResult(request);
+            return Task.FromResult(payload);
         }
     }
 }

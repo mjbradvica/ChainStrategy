@@ -1,4 +1,4 @@
-﻿// <copyright file="SampleConstrainedRequest.cs" company="Michael Bradvica LLC">
+﻿// <copyright file="SampleConstrainedPayload.cs" company="Michael Bradvica LLC">
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// Sample constrained request object.
     /// </summary>
-    public class SampleConstrainedRequest : ChainRequest, ISampleConstraint
+    public class SampleConstrainedPayload : ChainPayload, ISampleConstraint
     {
         /// <inheritdoc/>
         public Guid Id { get; private set; }

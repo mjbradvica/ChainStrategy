@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ChainStrategy
 {
     /// <summary>
-    /// Attempts to create a chain of responsibility for a given request object.
+    /// Attempts to create a chain of responsibility for a given payload object.
     /// </summary>
     public sealed class ChainFactory : IChainFactory
     {
@@ -30,14 +30,14 @@ namespace ChainStrategy
         }
 
         /// <inheritdoc/>
-        public async Task<TRequest> Execute<TRequest>(TRequest request, CancellationToken cancellationToken)
-            where TRequest : IChainRequest
+        public async Task<TPayload> Execute<TPayload>(TPayload payload, CancellationToken cancellationToken)
+            where TPayload : IChainPayload
         {
-            var profile = _serviceProvider.GetService<ChainProfile<TRequest>>();
+            var profile = _serviceProvider.GetService<ChainProfile<TPayload>>();
 
             if (profile == null)
             {
-                throw new NullReferenceException("No profile's were found for the provided request.");
+                throw new NullReferenceException("No profile's were found for the provided payload.");
             }
 
             if (!profile.ChainRegistrations.Any())
@@ -47,18 +47,18 @@ namespace ChainStrategy
 
             _registrations = profile.ChainRegistrations.Reverse().ToList();
 
-            var (handler, _) = InstantiateHandlers<TRequest>(null, 0);
+            var (handler, _) = InstantiateHandlers<TPayload>(null, 0);
 
             if (handler != null)
             {
-                return await handler.Handle(request, cancellationToken);
+                return await handler.Handle(payload, cancellationToken);
             }
 
             throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
         }
 
-        private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers<TRequest>(IChainHandler<TRequest>? handler, int index)
-            where TRequest : IChainRequest
+        private (IChainHandler<TPayload>? Handler, int Index) InstantiateHandlers<TPayload>(IChainHandler<TPayload>? handler, int index)
+            where TPayload : IChainPayload
         {
             if (index == _registrations.Count)
             {
@@ -75,7 +75,7 @@ namespace ChainStrategy
 
                     foreach (var dependency in handlerType.GetParameters())
                     {
-                        if (dependency.ParameterType == typeof(IChainHandler<TRequest>))
+                        if (dependency.ParameterType == typeof(IChainHandler<TPayload>))
                         {
                             dependencies.Add(null);
                         }
@@ -92,7 +92,7 @@ namespace ChainStrategy
                         }
                     }
 
-                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TRequest>;
+                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TPayload>;
 
                     return InstantiateHandlers(step, ++index);
                 }
@@ -109,7 +109,7 @@ namespace ChainStrategy
 
                     foreach (var dependency in handlerType.GetParameters())
                     {
-                        if (dependency.ParameterType == typeof(IChainHandler<TRequest>))
+                        if (dependency.ParameterType == typeof(IChainHandler<TPayload>))
                         {
                             dependencies.Add(handler);
                         }
@@ -119,7 +119,7 @@ namespace ChainStrategy
                         }
                     }
 
-                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TRequest>;
+                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TPayload>;
 
                     return InstantiateHandlers(step, ++index);
                 }

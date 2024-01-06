@@ -25,7 +25,7 @@ namespace ChainStrategy.Samples
 
             var factory = provider.GetRequiredService<IChainFactory>();
 
-            var result = await factory.Execute(new SampleChainRequest(5));
+            var result = await factory.Execute(new SampleChainPayload(5));
 
             Console.WriteLine(result.Value);
 
@@ -37,7 +37,7 @@ namespace ChainStrategy.Samples
 
             var constrainedFactory = provider.GetRequiredService<IChainFactory>();
 
-            var constrainedRequest = await constrainedFactory.Execute(new SampleConstrainedRequest());
+            var constrainedRequest = await constrainedFactory.Execute(new SampleConstrainedPayload());
 
             Console.WriteLine(constrainedRequest.Id);
         }
