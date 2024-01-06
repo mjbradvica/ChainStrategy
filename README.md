@@ -13,9 +13,9 @@ The advantages of ChainStrategy are:
 - :page_with_curl: Ready to go with minimal boilerplate
 - :heavy_check_mark: Easy unit testing
 - :arrow_down: Built with dependency injection in mind
-- :foot: Small footprint
+- :seedling: Small footprint
 - :books: Easy-to-learn API
-- :coin: Cancellation Token support
+- :purse: Cancellation Token support
 
 ## Table of Contents
 
