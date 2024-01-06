@@ -33,11 +33,7 @@ namespace ChainStrategy
         /// <exception cref="ArgumentNullException">Thrown when no handlers could be found for a request and response.</exception>
         public async Task<TStrategyResponse> Execute<TStrategyResponse>(IStrategyRequest<TStrategyResponse> request, CancellationToken cancellationToken)
         {
-            var requestType = request.GetType();
-
-            var responseType = requestType.GetInterfaces()[0].GetGenericArguments()[0];
-
-            if (Activator.CreateInstance(typeof(StrategyWrapper<,>).MakeGenericType(requestType, responseType)) is IStrategyWrapper<TStrategyResponse> service)
+            if (Activator.CreateInstance(typeof(StrategyWrapper<,>).MakeGenericType(request.GetType(), typeof(TStrategyResponse))) is IStrategyWrapper<TStrategyResponse> service)
             {
                 return await service.Execute(request, _serviceProvider, cancellationToken);
             }
