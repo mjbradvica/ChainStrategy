@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// A sample base logging handler.
     /// </summary>
-    /// <typeparam name="T">The type of the request object.</typeparam>
+    /// <typeparam name="T">The type of the payload object.</typeparam>
     public abstract class SampleLoggingHandler<T> : ChainHandler<T>
         where T : ChainPayload
     {
@@ -21,22 +21,22 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
         }
 
         /// <summary>
-        /// A middleware method for logging a request.
+        /// A middleware method for logging a payload.
         /// </summary>
-        /// <param name="request">The request object.</param>
+        /// <param name="payload">The payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public override Task<T> Middleware(T request, CancellationToken cancellationToken)
+        public override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
         {
             try
             {
-                return base.Middleware(request, cancellationToken);
+                return await base.Middleware(payload, cancellationToken);
             }
             catch (Exception exception)
             {
-                request.Faulted(exception);
+                payload.Faulted(exception);
 
-                return Task.FromResult(request);
+                return payload;
             }
         }
     }
