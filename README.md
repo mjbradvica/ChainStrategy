@@ -19,18 +19,34 @@ The advantages of ChainStrategy are:
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Dependencies](#dependencies)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Chain of Responsibility](#chain-of-responsibility)
-  - [Quick Start for Chains](#quick-start-for-chain-of-responsibility)
-  - [Detailed Usage for Chains](#detailed-usage-for-chain-of-responsibility)
-- [Strategy](#strategy)
-  - [Quick Start for Strategies](#quick-start-for-strategy)
-  - [Detailed Usage for Strategies](#detailed-usage-for-strategies)
-- [FAQ](#faq)
-- [Samples](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples)
+- [ChainStrategy](#chainstrategy)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Dependencies](#dependencies)
+  - [Installation](#installation)
+  - [Setup](#setup)
+  - [Chain of Responsibility](#chain-of-responsibility)
+    - [Quick Start for Chain of Responsibility](#quick-start-for-chain-of-responsibility)
+    - [Detailed Usage for Chain of Responsibility](#detailed-usage-for-chain-of-responsibility)
+      - [Custom Payload Objects](#custom-payload-objects)
+      - [Accepting Dependencies](#accepting-dependencies)
+      - [Aborting A Chain](#aborting-a-chain)
+      - [Using A Base Handler](#using-a-base-handler)
+      - [Handler Constraints](#handler-constraints)
+      - [Testing](#testing)
+  - [Strategy](#strategy)
+    - [Quick Start for Strategy](#quick-start-for-strategy)
+    - [Detailed Usage for Strategies](#detailed-usage-for-strategies)
+      - [Default Profiles](#default-profiles)
+      - [Accepting Strategy Dependencies](#accepting-strategy-dependencies)
+      - [Base Strategy Handlers](#base-strategy-handlers)
+      - [Testing Strategy Handlers](#testing-strategy-handlers)
+  - [FAQ](#faq)
+    - [Do I need a Chain of Responsibility?](#do-i-need-a-chain-of-responsibility)
+    - [Do I need a Strategy?](#do-i-need-a-strategy)
+    - [How is either different from a Mediator?](#how-is-either-different-from-a-mediator)
+    - [Can I use them together?](#can-i-use-them-together)
+    - [How often can I use a Chain of Responsibility or Strategy?](#how-often-can-i-use-a-chain-of-responsibility-or-strategy)
 
 ## Dependencies
 
@@ -124,7 +140,7 @@ public class MyProfile : ChainProfile<MyChainPayload>
 }
 ```
 
-Start a chain by injecting an IChainFactory of type T into a service. Call the Execute method and pass a payload object.
+Start a chain by injecting an IChainFactory into a service. Call the Execute method and pass a payload object.
 
 ```csharp
 public class IMyService
@@ -147,7 +163,7 @@ public class IMyService
 
 #### Custom Payload Objects
 
-You may create a custom implementation of the IChainPayload interface if you like. It only has one property that must be implemented. This property is checked by each default handler before each handler executes. If the value is true, the chain is aborted and returned to the caller.
+You may create a custom implementation of the IChainPayload interface if you like. It only has one property that must be implemented. This property is checked by each handler before it executes. If the value is true, the chain is aborted and returned to the caller.
 
 ```csharp
 public interface IChainPayload
@@ -214,7 +230,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
 
     public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
-        var strategyResult = _strategyFactory.Execute(new StrategyRequest(payload));
+        var strategyResult = await _strategyFactory.Execute(new StrategyRequest(payload));
 
         payload.Value = strategyResult;
 
@@ -284,7 +300,7 @@ public abstract class SampleLoggingHandler<T> : ChainHandler<T>
     {
         try
         {
-            return await base.DoWork(payload, cancellationToken);
+            return await base.Middleware(payload, cancellationToken);
         }
         catch (Exception exception)
         {
@@ -305,6 +321,11 @@ public class MyChainHandler : SampleLoggingHandler<MyChainPayload>
         : base(handler)
         {
         }
+
+    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    {
+        // implement and return payload.
+    }
 }
 ```
 
@@ -474,8 +495,6 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest>
 
 > All Strategy handlers must have a public or default constructor to be initialized properly.
 
-#### Strategy Profiles
-
 Profiles are very similar to chains except you are defining conditions instead of steps.
 
 You define a strategy by giving it a predicate based on your request object properties.
@@ -612,7 +631,50 @@ Any handler would inherit from this and implement the DoWork function instead of
 
 #### Testing Strategy Handlers
 
-// TODO: Show test samples.
+Testing strategy handlers is straightforward.
+
+```csharp
+[TestClass]
+public class StrategyTests
+{
+    [TestMethod]
+    public async Task Strategy_IsCorrect()
+    {
+        var strategy = new MyStrategyHandler();
+
+        var result = await strategy.Execute(new MyStrategyRequest());
+
+        Assert.Equal(expected, result);
+    }
+
+    [TestMethod]
+    public async Task Strategy_WithDependency_IsCorrect()
+    {
+        var mock = new Mock<IDependency>();
+        mock.Setup(x => x.Something()).ReturnsAsync(expectedObject);
+
+        var strategy = new MyStrategyHandler(mock.Object);
+
+        var result = await strategy.Execute(new MyStrategyRequest());
+
+        Assert.Equal(expected, result);
+    }
+
+    [TestMethod]
+    public async Task MockingFactory_FromService_IsCorrect()
+    {
+        var mock = new Mock<IStrategyFactory>();
+        mock.Setup(x => x.Execute(It.IsAny<MyStrategyRequest>, CancellationToken.None))
+            .ReturnsAsync(new MyStrategyResponse());
+
+        var service = new ServiceWithFactory(mock.Object);
+
+        var result = await service.HandleRequest(new MyRequest());
+
+        Assert.Equal(expected, result);
+    }
+}
+```
 
 ## FAQ
 
