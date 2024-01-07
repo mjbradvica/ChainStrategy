@@ -10,13 +10,13 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Test class for the abstract <see cref="ChainHandler{TRequest}"/>.
     /// </summary>
-    internal class TestChainHandler : ChainHandler<TestChainRequest>
+    internal class TestChainHandler : ChainHandler<TestChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TestChainHandler"/> class.
         /// </summary>
         /// <param name="handler">The next handler in the chain.</param>
-        public TestChainHandler(IChainHandler<TestChainRequest>? handler)
+        public TestChainHandler(IChainHandler<TestChainPayload>? handler)
             : base(handler)
         {
         }
@@ -24,14 +24,14 @@ namespace ChainStrategy.Tests
         /// <summary>
         /// Implementation of the DoWork method for testing.
         /// </summary>
-        /// <param name="request">The test chain request.</param>
+        /// <param name="payload">The test chain payload.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
-        /// <returns>The request after the step has processed.</returns>
-        public override Task<TestChainRequest> DoWork(TestChainRequest request, CancellationToken cancellationToken)
+        /// <returns>The payload after the step has processed.</returns>
+        public override Task<TestChainPayload> DoWork(TestChainPayload payload, CancellationToken cancellationToken)
         {
-            ++request.Value;
+            ++payload.Value;
 
-            return Task.FromResult(request);
+            return Task.FromResult(payload);
         }
     }
 }

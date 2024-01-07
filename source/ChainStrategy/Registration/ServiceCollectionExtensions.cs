@@ -33,8 +33,8 @@ namespace ChainStrategy.Registration
                 TryAddProfiles(services, assembly, typeof(StrategyProfile<,>));
             }
 
-            services.AddTransient(typeof(IChainFactory<>), typeof(ChainFactory<>));
-            services.AddTransient(typeof(IStrategyFactory<,>), typeof(StrategyFactory<,>));
+            services.AddTransient<IChainFactory, ChainFactory>();
+            services.AddTransient<IStrategyFactory, StrategyFactory>();
 
             return services;
         }
@@ -49,7 +49,7 @@ namespace ChainStrategy.Registration
                 {
                     if (implementationType.BaseType != null)
                     {
-                        services.AddTransient(implementationType.BaseType, implementationType);
+                        services.AddSingleton(implementationType.BaseType, implementationType);
                     }
                 });
         }

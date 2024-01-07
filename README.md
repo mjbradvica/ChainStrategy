@@ -13,23 +13,40 @@ The advantages of ChainStrategy are:
 - :page_with_curl: Ready to go with minimal boilerplate
 - :heavy_check_mark: Easy unit testing
 - :arrow_down: Built with dependency injection in mind
-- :foot: Small footprint
+- :seedling: Small footprint
 - :books: Easy-to-learn API
-- :coin: Cancellation Token support
+- :purse: Cancellation Token support
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Dependencies](#dependencies)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Quick Start](#quick-start)
-  - [Quick Chain](#quick-chain-of-responsibility)
-  - [Quick Strategy](#quick-strategy)
-- [Detailed Chain of Responsibility Usage](#chain-of-responsibility)
-- [Detailed Strategy Usage](#strategy)
-- [FAQ](#faq)
-- [Samples](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples)
+- [ChainStrategy](#chainstrategy)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Dependencies](#dependencies)
+  - [Installation](#installation)
+  - [Setup](#setup)
+  - [Chain of Responsibility](#chain-of-responsibility)
+    - [Quick Start for Chain of Responsibility](#quick-start-for-chain-of-responsibility)
+    - [Detailed Usage for Chain of Responsibility](#detailed-usage-for-chain-of-responsibility)
+      - [Custom Payload Objects](#custom-payload-objects)
+      - [Accepting Dependencies](#accepting-dependencies)
+      - [Aborting A Chain](#aborting-a-chain)
+      - [Using A Base Handler](#using-a-base-handler)
+      - [Handler Constraints](#handler-constraints)
+      - [Testing](#testing)
+  - [Strategy](#strategy)
+    - [Quick Start for Strategy](#quick-start-for-strategy)
+    - [Detailed Usage for Strategies](#detailed-usage-for-strategies)
+      - [Default Profiles](#default-profiles)
+      - [Accepting Strategy Dependencies](#accepting-strategy-dependencies)
+      - [Base Strategy Handlers](#base-strategy-handlers)
+      - [Testing Strategy Handlers](#testing-strategy-handlers)
+  - [FAQ](#faq)
+    - [Do I need a Chain of Responsibility?](#do-i-need-a-chain-of-responsibility)
+    - [Do I need a Strategy?](#do-i-need-a-strategy)
+    - [How is either different from a Mediator?](#how-is-either-different-from-a-mediator)
+    - [Can I use them together?](#can-i-use-them-together)
+    - [How often can I use a Chain of Responsibility or Strategy?](#how-often-can-i-use-a-chain-of-responsibility-or-strategy)
 
 ## Dependencies
 
@@ -37,7 +54,7 @@ ChainStrategy has one dependency on a single [Microsoft package](https://www.nug
 
 ## Installation
 
-The easiest way to get started is to: [Install with NuGet](https://www.nuget.org/).
+The easiest way to get started is to: [Install with NuGet](https://www.nuget.org/packages/ChainStrategy/).
 
 Install where you need with:
 
@@ -69,46 +86,50 @@ The method also accepts params of Assemblies to register from if you need to add
 builder.Services.AddChainStrategy(Assembly.Load("FirstProject"), Assembly.Load("SecondProject"));
 ```
 
-### Quick Start
+## Chain of Responsibility
 
-#### Quick Chain of Responsibility
+### Quick Start for Chain of Responsibility
 
-Create a request object that inherits from the ChainRequest base class.
+Create a payload object that inherits from the ChainPayload base class.
 
 ```csharp
-public class MyChainRequest : ChainRequest
+public class MyChainPayload : ChainPayload
 {
-    public int Value { get; set; }
+    public int InitialValue { get; set; }
 
-    // potentially lots of properties here.
+    public int FinalValue { get; set; }
 }
 ```
 
-Create handlers that inherit from the ChainHandler of T, where T is the type of your request object.
+> Your payload object should contain all data necessary for a chain, including initial, temporary, and final values.
+
+Create handlers that inherit from the ChainHandler of T, where T is the type of your payload object.
 
 Implement the DoWork method for each handler.
 
 ```csharp
-public class MyChainHandler : ChainHandler<MyChainRequest>
+public class MyChainHandler : ChainHandler<MyChainPayload>
 {
-    public MyChainHandler(IChainHandler<MyChainRequest>? handler)
+    public MyChainHandler(IChainHandler<MyChainPayload>? handler)
         : base(handler)
     {
     }
 
-    public override Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
+    public override Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
-        request.Value += 10;
+        payload.Value += 10;
 
-        return Task.FromResult(request);
+        return Task.FromResult(payload);
     }
 }
 ```
 
-Create a profile for a chain that inherits the ChainProfile of type T where T is your request object class. Add steps in the constructor.
+Create a profile for a chain that inherits from the ChainProfile of type T where T is your payload object class. Add steps in the constructor.
+
+> These steps are executed in the order. Make sure you double check your order of operations.
 
 ```csharp
-public class MyProfile : ChainProfile<MyChainRequest>
+public class MyProfile : ChainProfile<MyChainPayload>
 {
     public MyProfile()
     {
@@ -119,185 +140,134 @@ public class MyProfile : ChainProfile<MyChainRequest>
 }
 ```
 
-Start a chain by injecting an IChainFactory of type T into a service. Call the Execute method and pass a request object.
+Start a chain by injecting an IChainFactory into a service. Call the Execute method and pass a payload object.
 
 ```csharp
 public class IMyService
 {
-    private readonly IChainFactory<MyRequest> _chainFactory;
+    private readonly IChainFactory _chainFactory;
 
-    public IMyService(IChainFactory<MyRequest> chainFactory)
+    public IMyService(IChainFactory chainFactory)
     {
         _chainFactory = chainFactory;
     }
 
     public async Task Handle()
     {
-        var result = await _chainFactory.Execute(new MyRequest());
+        var result = await _chainFactory.Execute(new MyPayload());
     }
 }
 ```
 
-#### Quick Strategy
+### Detailed Usage for Chain of Responsibility
 
-Create a request and response object for a strategy. The request object must inherit from the IStrategyRequest object of type T, where T is the type of the response object.
+#### Custom Payload Objects
+
+You may create a custom implementation of the IChainPayload interface if you like. It only has one property that must be implemented. This property is checked by each handler before it executes. If the value is true, the chain is aborted and returned to the caller.
 
 ```csharp
-public class MyResponse
+public interface IChainPayload
 {
-    public int MyResult { get; set; }
-}
-
-public class MyRequest : IStrategyRequest<MyResponse>
-{
-    // properties in here
+    bool IsFaulted { get; }
 }
 ```
 
-Create any handlers required by inheriting from the IStrategyHandler of T and K. Where T is the type of the request object and K is the type of the response object.
+The base ChainPayload class has two virtual methods that may be overridden, the most common use case would be if you wanted to enrich faults with more metadata.
 
 ```csharp
-public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
+public abstract class MyCustomPayload : ChainPayload
 {
-    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
+    public DateTime FaultedAt { get; private set; }
+
+    public override void Faulted(Exception exception)
     {
-        // implement and return response
+        FaultedAt = DateTime.UtcNow;
+        base.Faulted(exception);
     }
 }
 ```
 
-Create a profile by inheriting from the StrategyProfile of type T and K. Where T is the type of the request object and K is the type of the response object.
-
-Add predicate conditions for each handler. Use the AddDefault for a default.
-
-```csharp
-public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
-{
-    public MyStrategyProfile()
-    {
-        AddStrategy<MyFirstHandler>(request => request.Value > 10);
-        AddStrategy<MySecondHandler>(request => request.Value == 0);
-        AddDefault<MyDefaultHandler>();
-    }
-}
-```
-
-Start a strategy by injecting an IStrategyFactory of type T and K. Where T is the type of the request object and K is the type of the response object.
-
-Call the Execute method and pass a request object.
-
-```csharp
-public class MyService
-{
-    private readonly IStrategyFactory<MyRequest, MyResponse> _strategyFactory;
-
-    public MyService(IStrategyFactory<MyRequest, MyResponse> strategyFactory)
-    {
-        _strategyFactory = strategyFactory;
-    }
-
-    public async Task Handle()
-    {
-        var result = await _strategyFactory.Execute(new MyRequest());
-    }
-}
-```
-
-### Chain of Responsibility
-
-#### Chain Request
-
-All Chains revolve around a common request object that is used for both input and output. Any state you need to store for the duration of the chain should be contained in the object.
-
-```csharp
-public class MyChainRequest : ChainRequest
-{
-    public int Value { get; set; }
-
-    // potentially lots of properties here.
-}
-```
-
-> All chain request objects must inherit from the IChainRequest interface. You may implement your own. However it is commonly recommended to use the ChainRequest base object most of the time.
-
-All Chain handlers follow a similar method. Create a class and inherit from ChainHandler of type T where T is your request type.
-
-You must implement the "DoWork" method for each handler.
-
-```csharp
-public class MyChainHandler : ChainHandler<MyChainRequest>
-{
-    public MyChainHandler(IChainHandler<MyChainRequest>? handler)
-        : base(handler)
-    {
-    }
-
-    public override Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
-    {
-        request.Value += 10;
-
-        return Task.FromResult(request);
-    }
-}
-```
-
-> A public constructor that accepts a sibling chain handler is required.
+All of your payloads would now inherit from your new base payload class.
 
 #### Accepting Dependencies
 
-ChainStrategy is built with dependency injection in mind. You may inject any dependency you need into the constructor.
+ChainStrategy is built for dependency injection. You may inject any dependency you need into the constructor.
 
 ```csharp
-public class MyChainHandler : ChainHandler<MyChainRequest>
+public class MyChainHandler : ChainHandler<MyChainPayload>
 {
     private readonly IMyDataSource _data;
 
-    public MyChainHandler(IChainHandler<MyChainRequest>? handler, IMyDataSource data)
+    public MyChainHandler(IChainHandler<MyChainPayload>? handler, IMyDataSource data)
         : base(handler)
     {
         _data = data;
     }
 
-    public override async Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
+    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         var myData = await _data.GetData();
 
-        request.Value = myData;
+        payload.Value = myData;
 
-        return request;
+        return payload;
+    }
+}
+```
+
+You may start another chain or strategy from inside a chain handler. Inject the appropriate factory and execute a payload or request.
+
+```csharp
+public class MyChainHandler : ChainHandler<MyChainPayload>
+{
+    private readonly IStrategyFactory _strategyFactory;
+
+    public MyChainHandler(IChainHandler<MyChainPayload>? handler, IStrategyFactory strategyFactory)
+        : base(handler)
+    {
+        _strategyFactory = strategyFactory;
+    }
+
+    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    {
+        var strategyResult = await _strategyFactory.Execute(new StrategyRequest(payload));
+
+        payload.Value = strategyResult;
+
+        return payload;
     }
 }
 ```
 
 #### Aborting A Chain
 
-There may be conditions where your chain faults or must return early. There is a built-in way of returning a request to the originator to avoid finishing the entire chain.
+There may be conditions where your chain faults or must return early. There is a built-in way of returning a payload to the originator to avoid finishing the entire chain.
 
 ```csharp
-public class MyChainHandler : ChainHandler<MyChainRequest>
+public class MyChainHandler : ChainHandler<MyChainPayload>
 {
     private readonly IMyDataSource _data;
 
-    public MyChainHandler(IChainHandler<MyChainRequest>? handler, IMyDataSource data)
+    public MyChainHandler(IChainHandler<MyChainPayload>? handler, IMyDataSource data)
         : base(handler)
     {
         _data = data;
     }
 
-    public override async Task<MyChainRequest> DoWork(MyChainRequest request, CancellationToken cancellationToken)
+    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         try
         {
             var myData = await _data.GetData();
 
-            request.Value = myData;
+            payload.Value = myData;
         }
         catch
         {
-            request.Faulted();
+            payload.Faulted();
         }
 
-        return request;
+        return payload;
     }
 }
 ```
@@ -307,7 +277,7 @@ You may also pass an exception to the Faulted method if you'd like to log the ob
 ```csharp
     catch (Exception exception)
     {
-        request.Faulted(exception);
+        payload.Faulted(exception);
     }
 ```
 
@@ -319,24 +289,24 @@ The example shows an abstract handler that will override the Middleware method. 
 
 ```csharp
 public abstract class SampleLoggingHandler<T> : ChainHandler<T>
-    where T : ChainRequest
+    where T : ChainPayload
 {
     protected SampleLoggingHandler(IChainHandler<T>? handler)
         : base(handler)
     {
     }
 
-    public override Task<T> Middleware(T request, CancellationToken cancellationToken)
+    public override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
     {
         try
         {
-            return base.Middleware(request, cancellationToken);
+            return await base.Middleware(payload, cancellationToken);
         }
         catch (Exception exception)
         {
-            request.Faulted(exception);
+            payload.Faulted(exception);
 
-            return Task.FromResult(request);
+            return payload;
         }
     }
 }
@@ -345,20 +315,30 @@ public abstract class SampleLoggingHandler<T> : ChainHandler<T>
 Your handlers that need to use this can simply inherit from this class instead.
 
 ```csharp
-public class MyChainHandler : SampleLoggingHandler<MyChainRequest>
+public class MyChainHandler : SampleLoggingHandler<MyChainPayload>
 {
-    // everything ele is the same as above.
+    public MyChainHandler(IChainHandler<MyChainPayload>? handler)
+        : base(handler)
+        {
+        }
+
+    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    {
+        // implement and return payload.
+    }
 }
 ```
 
+> When adding steps in your profile, make sure you are using the correct handler. Accidentally adding an abstract base handler will throw an exception.
+
 #### Handler Constraints
 
-You may reuse a handler in multiple chains by constraining the request type via an interface.
+You may reuse a handler in multiple chains by constraining the payload type via an interface.
 
-> The interface needs to inherit from the "IChainRequest" interface even if you rely on the default implementation.
+> The interface needs to inherit from the "IChainPayload" interface even if you rely on the default implementation.
 
 ```csharp
-public interface IData : IChainRequest
+public interface IData : IChainPayload
 {
     Guid Id { get; }
 
@@ -367,7 +347,7 @@ public interface IData : IChainRequest
 ```
 
 ```csharp
-public class MyChainRequest : ChainRequest, IData
+public class MyChainPayload : ChainPayload, IData
 {
     // implement properties and methods
 }
@@ -375,7 +355,7 @@ public class MyChainRequest : ChainRequest, IData
 
 Add the constraint handler and implement the interface accordingly.
 
-> Constrained handlers need to be abstract base handlers which utilize the generic constraint.
+> Constrained handlers need to be abstract classes which utilize the generic constraint.
 
 ```csharp
 public abstract class MyConstrainedHandler<T> : ChainHandler<T>
@@ -386,14 +366,14 @@ public abstract class MyConstrainedHandler<T> : ChainHandler<T>
         {
         }
 
-    public override Task<T> DoWork(T request, CancellationToken cancellationToken)
+    public override Task<T> DoWork(T payload, CancellationToken cancellationToken)
     {
-        if (request.id == Guid.Empty)
+        if (payload.id == Guid.Empty)
         {
-            request.UpdateId(id);
+            payload.UpdateId(id);
         }
 
-        return Task.FromResult(request);
+        return Task.FromResult(payload);
     }
 }
 ```
@@ -401,52 +381,12 @@ public abstract class MyConstrainedHandler<T> : ChainHandler<T>
 Your concrete handler only needs to derive from the constrained base.
 
 ```csharp
-public class MyHandler : MyConstrainedHandler<MyChainRequest>
+public class MyHandler : MyConstrainedHandler<MyChainPayload>
 {
-    public MyHandler(IChainHandler<MyRequest>? handler)
+    public MyHandler(IChainHandler<MyPayload>? handler)
         : base(handler)
-        {}
-}
-```
-
-#### Building A Profile
-
-ChainStrategy uses Profiles to define what steps you want to use and in what order to use them.
-
-```csharp
-public class MyProfile : ChainProfile<MyChainRequest>
-{
-    public MyProfile()
-    {
-        AddStep<MyChainHandler>()
-        .AddStep<NextStep>()
-        .AddStep<FinalStep>();
-    }
-}
-```
-
-The library will execute each step in the order you define them.
-
-> Do not put conditional logic in a profile. That kind of logic belongs in handlers.
-
-#### Usage
-
-Simply inject an IChainFactory of type T where T is your request when needed. Call the Execute method on the factory object to initiate your chain.
-
-```csharp
-public class IMyService
-{
-    private readonly IChainFactory<MyRequest> _chainFactory;
-
-    public IMyService(IChainFactory<MyRequest> chainFactory)
-    {
-        _chainFactory = chainFactory;
-    }
-
-    public async Task Handle()
-    {
-        var result = await _chainFactory.Execute(new MyRequest());
-    }
+        {
+        }
 }
 ```
 
@@ -463,7 +403,7 @@ public class MyHandlerTests
     {
         var handler = new MyHandler(null);
 
-        var result = await handler.Handle(new MyRequest(), CancellationToken.None);
+        var result = await handler.Handle(new MyPayload(), CancellationToken.None);
 
         Assert.AreEqual(expected, result);
     }
@@ -476,7 +416,7 @@ public class MyHandlerTests
 
         var handler = new MyHandler(null, mock.Object);
 
-        var result = await handler.Handle(new MyRequest(), CancellationToken.None);
+        var result = await handler.Handle(new MyPayload(), CancellationToken.None);
 
         Assert.AreEqual(expected, result);
     }
@@ -484,9 +424,9 @@ public class MyHandlerTests
     [TestMethod]
     public async Task ServiceTestForFactory()
     {
-        var mock = new Mock<IChainFactory<MyRequest>>();
-        mock.Setup(x => x.Execute(It.IsAny<MyRequest>(), CancellationToken.None))
-            .ReturnsAsync(new MyRequest());
+        var mock = new Mock<IChainFactory<MyPayload>>();
+        mock.Setup(x => x.Execute(It.IsAny<MyPayload>(), CancellationToken.None))
+            .ReturnsAsync(new MyPayload());
 
         var service = new MyService(mock.Object);
 
@@ -497,11 +437,11 @@ public class MyHandlerTests
 }
 ```
 
-### Strategy
+## Strategy
 
-#### Request and Response
+### Quick Start for Strategy
 
-Unlike chains, a strategy uses both a request and response object.
+Unlike chains, strategies use both a request and response object.
 
 ```csharp
 public class MyResponse
@@ -519,7 +459,13 @@ public class MyRequest : IStrategyRequest<MyResponse>
 }
 ```
 
-#### Implementing A Handler
+If your strategy has no return type, use the non-generic version of the IStrategyRequest interface.
+
+```csharp
+public class MyRequest : IStrategyRequest
+{
+}
+```
 
 Implement a handler by inheriting from the IStrategyHandler of type TRequest, TResponse where TRequest is your request type, and TResponse is your response type.
 
@@ -534,6 +480,76 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
     }
 }
 ```
+
+If your request object does not have a return type, the Nothing class will be used instead. Nothing as the name states, is a substitute for void.
+
+```csharp
+public class MyStrategyHandler : IStrategyHandler<MyRequest>
+{
+    public async Task<Nothing> Handle(MyRequest request, CancellationToken cancellationToken)
+    {
+        // implement and return response
+    }
+}
+```
+
+> All Strategy handlers must have a public or default constructor to be initialized properly.
+
+Profiles are very similar to chains except you are defining conditions instead of steps.
+
+You define a strategy by giving it a predicate based on your request object properties.
+
+> Note: These are executed in order so put your most constrained definitions first.
+
+```csharp
+public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
+{
+    public MyStrategyProfile()
+    {
+        AddStrategy<MySecondHandler>(request => request.Value == 0);
+        AddStrategy<MyFirstHandler>(request => request.Value > 10);
+    }
+}
+```
+
+Strategies follow the same pattern as chains, inject the factory into the class you want to use it in. Call the Execute method when required.
+
+```csharp
+public class MyService
+{
+    private readonly IStrategyFactory _strategyFactory;
+
+    public MyService(IStrategyFactory strategyFactory)
+    {
+        _strategyFactory = strategyFactory;
+    }
+
+    public async Task Handle()
+    {
+        var result = await _strategyFactory.Execute(new MyRequest());
+    }
+}
+```
+
+### Detailed Usage for Strategies
+
+#### Default Profiles
+
+A profile may have a Default handler if no condition is satisfied.
+
+```csharp
+public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
+{
+    public MyStrategyProfile()
+    {
+        AddStrategy<MySecondHandler>(request => request.Value == 0);
+        AddStrategy<MyFirstHandler>(request => request.Value > 10);
+        AddDefault<MyFirstHandler>();
+    }
+}
+```
+
+> You may only have one default handler, calling the method twice will just overwrite the previous one.
 
 #### Accepting Strategy Dependencies
 
@@ -556,49 +572,106 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 }
 ```
 
-#### Strategy Profiles
-
-Profiles are very similar to chains except you are defining conditions instead of steps.
-
-You define a strategy by giving it a predicate based on your request object properties.
-
-> Note: These are executed in order so put your most constrained definitions first.
-
-You may add a default strategy if no conditions are met. The default does not accept a predicate.
+Similar to chains, you may start another chain or strategy inside of an existing handler.
 
 ```csharp
-public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
+public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 {
-    public MyStrategyProfile()
+    private readonly IChainFactory _chainFactory;
+
+    public MyStrategyHandler(IChainFactory chainFactory)
     {
-        AddStrategy<MyFirstHandler>(request => request.Value > 10);
-        AddStrategy<MySecondHandler>(request => request.Value == 0);
-        AddDefault<MyDefaultHandler>();
+        _chainFactory = chainFactory;
+    }
+
+    public async Task<MyResponse> Handle(MyRequest request, CancellationToken cancellationToken)
+    {
+        var chainResult = await _chainFactory.Execute(new MyChainPayload(request));
+
+        return new MyResponse(chainResult);
     }
 }
 ```
 
-#### Testing Strategy Handlers
+#### Base Strategy Handlers
 
-Testing any Strategy handlers is no different than a chain handler class.
-
-#### Strategy Usage
-
-Strategies follow the same pattern as chains, inject the factory into the class you want to use it in. Call the ExecuteStrategy method when required.
+Similar to chains, you may have a base handler to share common logic. This example shows wrapping logic in a try-catch.
 
 ```csharp
-public class MyService
+public abstract class SampleStrategyLoggingHandler<TRequest, TResponse> : IStrategyHandler<TRequest, TResponse>
+    where TRequest : IStrategyRequest<TResponse>
+    where TResponse : new()
 {
-    private readonly IStrategyFactory<MyRequest, MyResponse> _strategyFactory;
+    private readonly ILogger _logger;
 
-    public MyService(IStrategyFactory<MyRequest, MyResponse> strategyFactory)
+    protected SampleStrategyLoggingHandler(ILogger logger)
     {
-        _strategyFactory = strategyFactory;
+        _logger = logger;
     }
 
-    public async Task Handle()
+    public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        var result = await _strategyFactory.Execute(new MyRequest());
+        try
+        {
+            return await DoWork(request, cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            _logger.Error(exception, $"An exception occurred at {DateTime.UtcNow} in the {GetType().Name} handler.");
+        }
+
+        return new TResponse();
+    }
+
+    public abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
+}
+```
+
+Any handler would inherit from this and implement the DoWork function instead of Handle.
+
+#### Testing Strategy Handlers
+
+Testing strategy handlers is straightforward.
+
+```csharp
+[TestClass]
+public class StrategyTests
+{
+    [TestMethod]
+    public async Task Strategy_IsCorrect()
+    {
+        var strategy = new MyStrategyHandler();
+
+        var result = await strategy.Execute(new MyStrategyRequest());
+
+        Assert.Equal(expected, result);
+    }
+
+    [TestMethod]
+    public async Task Strategy_WithDependency_IsCorrect()
+    {
+        var mock = new Mock<IDependency>();
+        mock.Setup(x => x.Something()).ReturnsAsync(expectedObject);
+
+        var strategy = new MyStrategyHandler(mock.Object);
+
+        var result = await strategy.Execute(new MyStrategyRequest());
+
+        Assert.Equal(expected, result);
+    }
+
+    [TestMethod]
+    public async Task MockingFactory_FromService_IsCorrect()
+    {
+        var mock = new Mock<IStrategyFactory>();
+        mock.Setup(x => x.Execute(It.IsAny<MyStrategyRequest>, CancellationToken.None))
+            .ReturnsAsync(new MyStrategyResponse());
+
+        var service = new ServiceWithFactory(mock.Object);
+
+        var result = await service.HandleRequest(new MyRequest());
+
+        Assert.Equal(expected, result);
     }
 }
 ```

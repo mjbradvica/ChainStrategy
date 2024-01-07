@@ -20,13 +20,13 @@ namespace ChainStrategy
         /// </summary>
         protected StrategyProfile()
         {
-            Strategies = new Dictionary<Func<TStrategyRequest, bool>, Type>();
+            Strategies = new Dictionary<Predicate<TStrategyRequest>, Type>();
         }
 
         /// <summary>
-        /// Gets a dictionary of functions that determine which strategy to be executed.
+        /// Gets a dictionary of predicates that determine which strategy to be executed.
         /// </summary>
-        public Dictionary<Func<TStrategyRequest, bool>, Type> Strategies { get; }
+        public Dictionary<Predicate<TStrategyRequest>, Type> Strategies { get; }
 
         /// <summary>
         /// Gets the default strategy type to be called if no defined conditions satisfy the request.
@@ -37,11 +37,11 @@ namespace ChainStrategy
         /// Adds a strategy to the profile given a certain request condition.
         /// </summary>
         /// <typeparam name="TStrategyHandler">The strategy handler to be added for the condition.</typeparam>
-        /// <param name="strategyExpression">The condition for the given handler to be called.</param>
-        public void AddStrategy<TStrategyHandler>(Func<TStrategyRequest, bool> strategyExpression)
+        /// <param name="strategyPredicate">A <see cref="Predicate{T}"/> for the given handler to be called.</param>
+        public void AddStrategy<TStrategyHandler>(Predicate<TStrategyRequest> strategyPredicate)
             where TStrategyHandler : IStrategyHandler<TStrategyRequest, TStrategyResponse>
         {
-            Strategies.TryAdd(strategyExpression, typeof(TStrategyHandler));
+            Strategies.TryAdd(strategyPredicate, typeof(TStrategyHandler));
         }
 
         /// <summary>

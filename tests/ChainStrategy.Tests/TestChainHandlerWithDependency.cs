@@ -10,7 +10,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A test chain handler with an injected dependency.
     /// </summary>
-    internal class TestChainHandlerWithDependency : ChainHandler<TestChainRequest>
+    internal class TestChainHandlerWithDependency : ChainHandler<TestChainPayload>
     {
         private readonly TestChainDependency _dependency;
 
@@ -19,23 +19,23 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <param name="handler">The next handler in the chain.</param>
         /// <param name="dependency">An injected dependency.</param>
-        public TestChainHandlerWithDependency(IChainHandler<TestChainRequest>? handler, TestChainDependency dependency)
+        public TestChainHandlerWithDependency(IChainHandler<TestChainPayload>? handler, TestChainDependency dependency)
             : base(handler)
         {
             _dependency = dependency;
         }
 
         /// <summary>
-        /// Does work and returns the request.
+        /// Does work and returns the payload.
         /// </summary>
-        /// <param name="request">The request object.</param>
+        /// <param name="payload">The payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
-        /// <returns>The same request object after the operation is complete.</returns>
-        public override Task<TestChainRequest> DoWork(TestChainRequest request, CancellationToken cancellationToken)
+        /// <returns>The same payload object after the operation is complete.</returns>
+        public override Task<TestChainPayload> DoWork(TestChainPayload payload, CancellationToken cancellationToken)
         {
-            ++request.Value;
+            ++payload.Value;
 
-            return Task.FromResult(request);
+            return Task.FromResult(payload);
         }
     }
 }

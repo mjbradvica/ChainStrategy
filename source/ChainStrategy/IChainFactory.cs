@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 namespace ChainStrategy
 {
     /// <summary>
-    /// An interface for a factory that will initialize a chain of responsibility for the given request object.
+    /// An interface for a factory that will initialize a chain of responsibility for the given payload object.
     /// </summary>
-    /// <typeparam name="TRequest">The request object for the chain being initialized.</typeparam>
-    public interface IChainFactory<TRequest>
-        where TRequest : IChainRequest
+    public interface IChainFactory
     {
         /// <summary>
-        /// Executes a chain of responsibility given a request.
+        /// Executes a chain of responsibility given a payload.
         /// </summary>
-        /// <param name="request">The request object to be executed.</param>
+        /// <typeparam name="TPayload">The payload object for the chain being initialized.</typeparam>
+        /// <param name="payload">The payload object to be executed.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
-        /// <returns>A <see cref="Task"/> of the request type representing the asynchronous operation.</returns>
-        Task<TRequest> Execute(TRequest request, CancellationToken cancellationToken = default);
+        /// <returns>A <see cref="Task"/> of the payload type representing the asynchronous operation.</returns>
+        Task<TPayload> Execute<TPayload>(TPayload payload, CancellationToken cancellationToken = default)
+            where TPayload : IChainPayload;
     }
 }

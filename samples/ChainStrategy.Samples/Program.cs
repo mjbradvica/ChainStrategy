@@ -23,21 +23,21 @@ namespace ChainStrategy.Samples
 
             var provider = services.BuildServiceProvider();
 
-            var factory = provider.GetRequiredService<IChainFactory<SampleChainRequest>>();
+            var factory = provider.GetRequiredService<IChainFactory>();
 
-            var result = await factory.Execute(new SampleChainRequest(5));
+            var result = await factory.Execute(new SampleChainPayload(5));
 
             Console.WriteLine(result.Value);
 
-            var strategyFactory = provider.GetRequiredService<IStrategyFactory<SampleStrategyRequest, SampleStrategyResponse>>();
+            var strategyFactory = provider.GetRequiredService<IStrategyFactory>();
 
             var strategyResult = await strategyFactory.Execute(new SampleStrategyRequest());
 
             Console.WriteLine(strategyResult.Value);
 
-            var constrainedFactory = provider.GetRequiredService<IChainFactory<SampleConstrainedRequest>>();
+            var constrainedFactory = provider.GetRequiredService<IChainFactory>();
 
-            var constrainedRequest = await constrainedFactory.Execute(new SampleConstrainedRequest());
+            var constrainedRequest = await constrainedFactory.Execute(new SampleConstrainedPayload());
 
             Console.WriteLine(constrainedRequest.Id);
         }

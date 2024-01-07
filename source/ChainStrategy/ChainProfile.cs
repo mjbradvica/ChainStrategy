@@ -8,16 +8,16 @@ using System.Collections.Generic;
 namespace ChainStrategy
 {
     /// <summary>
-    /// Allows an end-user to configure handler and their order of operations for a request.
+    /// Allows an end-user to configure handler and their order of operations for a payload.
     /// </summary>
-    /// <typeparam name="TRequest">The request for the chain being configured.</typeparam>
-    public abstract class ChainProfile<TRequest>
-        where TRequest : IChainRequest
+    /// <typeparam name="TPayload">The payload for the chain being configured.</typeparam>
+    public abstract class ChainProfile<TPayload>
+        where TPayload : IChainPayload
     {
         private readonly List<Type> _registrations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainProfile{TRequest}"/> class.
+        /// Initializes a new instance of the <see cref="ChainProfile{TPayload}"/> class.
         /// </summary>
         protected ChainProfile()
         {
@@ -25,7 +25,7 @@ namespace ChainStrategy
         }
 
         /// <summary>
-        /// Gets all the of the chain registrations associated with the request.
+        /// Gets all the of the chain registrations associated with the payload.
         /// </summary>
         public IReadOnlyList<Type> ChainRegistrations => _registrations.AsReadOnly();
 
@@ -34,8 +34,8 @@ namespace ChainStrategy
         /// </summary>
         /// <typeparam name="THandler">The handler being added to the chain order.</typeparam>
         /// <returns>The ChainProfile instance to continue adding handlers.</returns>
-        public ChainProfile<TRequest> AddStep<THandler>()
-            where THandler : IChainHandler<TRequest>
+        public ChainProfile<TPayload> AddStep<THandler>()
+            where THandler : IChainHandler<TPayload>
         {
             _registrations.Add(typeof(THandler));
 

@@ -39,9 +39,9 @@ namespace ChainStrategy.Tests
 
             var provider = collection.BuildServiceProvider();
 
-            var chainFactory = provider.GetRequiredService<IChainFactory<TestChainRequest>>();
-            var strategyFactory = provider.GetRequiredService<IStrategyFactory<TestStrategyRequest, TestStrategyResponse>>();
-            var chainProfile = provider.GetRequiredService<ChainProfile<TestChainRequest>>();
+            var chainFactory = provider.GetRequiredService<IChainFactory>();
+            var strategyFactory = provider.GetRequiredService<IStrategyFactory>();
+            var chainProfile = provider.GetRequiredService<ChainProfile<TestChainPayload>>();
             var strategyProfile = provider.GetRequiredService<StrategyProfile<TestStrategyRequest, TestStrategyResponse>>();
 
             Assert.IsNotNull(chainFactory);

@@ -12,30 +12,32 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ChainStrategy
 {
     /// <summary>
-    /// Attempts to create a chain of responsibility for a given request object.
+    /// Attempts to create a chain of responsibility for a given payload object.
     /// </summary>
-    /// <typeparam name="TRequest">The request object for the chain being created.</typeparam>
-    public sealed class ChainFactory<TRequest> : IChainFactory<TRequest>
-        where TRequest : IChainRequest
+    public sealed class ChainFactory : IChainFactory
     {
-        private readonly IList<Type> _registrations;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IChainHandler<TRequest> _handler;
+        private IList<Type> _registrations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainFactory{TRequest}"/> class.
+        /// Initializes a new instance of the <see cref="ChainFactory"/> class.
         /// </summary>
         /// <param name="serviceProvider">A service provider to extract dependencies from.</param>
         public ChainFactory(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _registrations = new List<Type>();
+        }
 
-            var profile = _serviceProvider.GetService<ChainProfile<TRequest>>();
+        /// <inheritdoc/>
+        public async Task<TPayload> Execute<TPayload>(TPayload payload, CancellationToken cancellationToken)
+            where TPayload : IChainPayload
+        {
+            var profile = _serviceProvider.GetService<ChainProfile<TPayload>>();
 
             if (profile == null)
             {
-                throw new NullReferenceException("No profile's were found for the provided request.");
+                throw new NullReferenceException("No profile's were found for the provided payload.");
             }
 
             if (!profile.ChainRegistrations.Any())
@@ -45,25 +47,18 @@ namespace ChainStrategy
 
             _registrations = profile.ChainRegistrations.Reverse().ToList();
 
-            var (handler, _) = InstantiateHandlers(null, 0);
+            var (handler, _) = InstantiateHandlers<TPayload>(null, 0);
 
             if (handler != null)
             {
-                _handler = handler;
+                return await handler.Handle(payload, cancellationToken);
             }
-            else
-            {
-                throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
-            }
+
+            throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
         }
 
-        /// <inheritdoc/>
-        public async Task<TRequest> Execute(TRequest request, CancellationToken cancellationToken)
-        {
-            return await _handler.Handle(request, cancellationToken);
-        }
-
-        private (IChainHandler<TRequest>? Handler, int Index) InstantiateHandlers(IChainHandler<TRequest>? handler, int index)
+        private (IChainHandler<TPayload>? Handler, int Index) InstantiateHandlers<TPayload>(IChainHandler<TPayload>? handler, int index)
+            where TPayload : IChainPayload
         {
             if (index == _registrations.Count)
             {
@@ -80,7 +75,7 @@ namespace ChainStrategy
 
                     foreach (var dependency in handlerType.GetParameters())
                     {
-                        if (dependency.ParameterType == typeof(IChainHandler<TRequest>))
+                        if (dependency.ParameterType == typeof(IChainHandler<TPayload>))
                         {
                             dependencies.Add(null);
                         }
@@ -97,7 +92,7 @@ namespace ChainStrategy
                         }
                     }
 
-                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TRequest>;
+                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TPayload>;
 
                     return InstantiateHandlers(step, ++index);
                 }
@@ -114,7 +109,7 @@ namespace ChainStrategy
 
                     foreach (var dependency in handlerType.GetParameters())
                     {
-                        if (dependency.ParameterType == typeof(IChainHandler<TRequest>))
+                        if (dependency.ParameterType == typeof(IChainHandler<TPayload>))
                         {
                             dependencies.Add(handler);
                         }
@@ -124,7 +119,7 @@ namespace ChainStrategy
                         }
                     }
 
-                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TRequest>;
+                    var step = handlerType.Invoke(dependencies.ToArray()) as IChainHandler<TPayload>;
 
                     return InstantiateHandlers(step, ++index);
                 }

@@ -7,28 +7,28 @@ namespace ChainStrategy.Samples.ChainOfResponsibility
     /// <summary>
     /// Sample handler to show addition.
     /// </summary>
-    internal class SampleAdditionHandler : ChainHandler<SampleChainRequest>
+    internal class SampleAdditionHandler : ChainHandler<SampleChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleAdditionHandler"/> class.
         /// </summary>
         /// <param name="handler">The next sample handler.</param>
-        public SampleAdditionHandler(IChainHandler<SampleChainRequest>? handler)
+        public SampleAdditionHandler(IChainHandler<SampleChainPayload>? handler)
             : base(handler)
         {
         }
 
         /// <summary>
-        /// Adds to the current request value.
+        /// Adds to the current payload value.
         /// </summary>
-        /// <param name="request">The current request object.</param>
+        /// <param name="payload">The current payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
-        /// <returns>A modified request object.</returns>
-        public override Task<SampleChainRequest> DoWork(SampleChainRequest request, CancellationToken cancellationToken)
+        /// <returns>A modified payload object.</returns>
+        public override Task<SampleChainPayload> DoWork(SampleChainPayload payload, CancellationToken cancellationToken)
         {
-            request.Value += 5;
+            payload.Value += 5;
 
-            return Task.FromResult(request);
+            return Task.FromResult(payload);
         }
     }
 }
