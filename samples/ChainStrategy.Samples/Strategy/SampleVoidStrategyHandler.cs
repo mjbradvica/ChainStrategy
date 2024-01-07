@@ -1,4 +1,8 @@
-﻿namespace ChainStrategy.Samples.Strategy
+﻿// <copyright file="SampleVoidStrategyHandler.cs" company="Michael Bradvica LLC">
+// Copyright (c) Michael Bradvica LLC. All rights reserved.
+// </copyright>
+
+namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
     /// Sample void strategy handler.

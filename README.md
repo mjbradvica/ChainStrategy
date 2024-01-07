@@ -512,7 +512,7 @@ public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
 }
 ```
 
-Strategies follow the same pattern as chains, inject the factory into the class you want to use it in. Call the ExecuteStrategy method when required.
+Strategies follow the same pattern as chains, inject the factory into the class you want to use it in. Call the Execute method when required.
 
 ```csharp
 public class MyService
