@@ -22,6 +22,7 @@ The advantages of ChainStrategy are:
 - [ChainStrategy](#chainstrategy)
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
+  - [Samples](#samples)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
   - [Setup](#setup)
@@ -47,6 +48,10 @@ The advantages of ChainStrategy are:
     - [How is either different from a Mediator?](#how-is-either-different-from-a-mediator)
     - [Can I use them together?](#can-i-use-them-together)
     - [How often can I use a Chain of Responsibility or Strategy?](#how-often-can-i-use-a-chain-of-responsibility-or-strategy)
+
+## Samples
+
+If you would like code samples for ChainStrategy, they may be found [here](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples).
 
 ## Dependencies
 

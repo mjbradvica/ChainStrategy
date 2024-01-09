@@ -6,7 +6,7 @@
 	  <Title>ChainStrategy</Title>
 	  <Authors>Michael Bradvica</Authors>
 	  <Company>Michael Bradvica LLC.</Company>
-	  <Description>An implmentation of the Strategy and Chain of Responsibility patterns for .NET.</Description>
+	  <Description>An implementation of the Strategy and Chain of Responsibility patterns for .NET.</Description>
 	  <Copyright>Copyright 2024. All rights reserved.</Copyright>
 	  <PackageProjectUrl>https://github.com/mjbradvica/ChainStrategy</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
