@@ -168,7 +168,7 @@ public class IMyService
 
 #### Custom Payload Objects
 
-You may create a custom implementation of the IChainPayload interface if you desire. It has one property that must be implemented. This property is checked by each handler before it executes. If the value is true, the chain is aborted and returned to the caller.
+You may create a custom implementation of the IChainPayload interface if you desire. It has only one property that must be implemented. This property is checked by each handler before it executes. If the value is true, the chain is aborted and returned to the caller.
 
 ```csharp
 public interface IChainPayload
@@ -517,7 +517,7 @@ public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
 }
 ```
 
-Strategies follow the same pattern as chains; inject the factory into the class you want to use. Call the Execute method when required.
+Strategies follow the same pattern as chains; in other words, inject the factory into the class you want to use. Call the Execute method when required.
 
 ```csharp
 public class MyService
