@@ -69,3 +69,4 @@ dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.IDE0270.severity = none
 dotnet_diagnostic.IDE0290.severity = none
 dotnet_diagnostic.IDE0305.severity = none
+dotnet_diagnostic.IDE0028.severity = none

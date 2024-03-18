@@ -22,6 +22,7 @@ The advantages of ChainStrategy are:
 - [ChainStrategy](#chainstrategy)
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
+  - [Samples](#samples)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
   - [Setup](#setup)
@@ -47,6 +48,10 @@ The advantages of ChainStrategy are:
     - [How is either different from a Mediator?](#how-is-either-different-from-a-mediator)
     - [Can I use them together?](#can-i-use-them-together)
     - [How often can I use a Chain of Responsibility or Strategy?](#how-often-can-i-use-a-chain-of-responsibility-or-strategy)
+
+## Samples
+
+If you would like code samples for ChainStrategy, they can be found [here](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples).
 
 ## Dependencies
 
@@ -124,7 +129,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
 }
 ```
 
-Create a profile for a chain that inherits from the ChainProfile of type T where T is your payload object class. Add steps in the constructor.
+Create a profile for a chain that inherits from the ChainProfile of type T, where T is your payload object class. Add steps in the constructor.
 
 > These steps are executed in the order. Make sure you double check your order of operations.
 
@@ -140,7 +145,7 @@ public class MyProfile : ChainProfile<MyChainPayload>
 }
 ```
 
-Start a chain by injecting an IChainFactory into a service. Call the Execute method and pass a payload object.
+Start a chain by injecting an IChainFactory into a service. Call the Execute method, and pass a payload object.
 
 ```csharp
 public class IMyService
@@ -163,7 +168,7 @@ public class IMyService
 
 #### Custom Payload Objects
 
-You may create a custom implementation of the IChainPayload interface if you like. It only has one property that must be implemented. This property is checked by each handler before it executes. If the value is true, the chain is aborted and returned to the caller.
+You may create a custom implementation of the IChainPayload interface if you desire. It has only one property that must be implemented. This property is checked by each handler before it executes. If the value is true, the chain is aborted and returned to the caller.
 
 ```csharp
 public interface IChainPayload
@@ -172,7 +177,7 @@ public interface IChainPayload
 }
 ```
 
-The base ChainPayload class has two virtual methods that may be overridden, the most common use case would be if you wanted to enrich faults with more metadata.
+The base ChainPayload class has two virtual methods that may be overridden. The most common use case would be if you wanted to enrich faults with more metadata.
 
 ```csharp
 public abstract class MyCustomPayload : ChainPayload
@@ -283,9 +288,9 @@ You may also pass an exception to the Faulted method if you'd like to log the ob
 
 #### Using A Base Handler
 
-If you find yourself repeating yourself in multiple handlers you may create a base handler to accomplish common tasks.
+If you happen to be repeating yourself in multiple handlers, you may create a base handler to accomplish common tasks.
 
-The example shows an abstract handler that will override the Middleware method. Middleware just calls DoWork under the hood.
+The example below shows an abstract handler that will override the Middleware method. Middleware just calls DoWork under the hood.
 
 ```csharp
 public abstract class SampleLoggingHandler<T> : ChainHandler<T>
@@ -335,7 +340,7 @@ public class MyChainHandler : SampleLoggingHandler<MyChainPayload>
 
 You may reuse a handler in multiple chains by constraining the payload type via an interface.
 
-> The interface needs to inherit from the "IChainPayload" interface even if you rely on the default implementation.
+> The interface needs to inherit from the "IChainPayload" interface, even if you rely on the default implementation.
 
 ```csharp
 public interface IData : IChainPayload
@@ -450,7 +455,7 @@ public class MyResponse
 }
 ```
 
-Request objects will implement the IStrategyRequest interface of type T where T is your response type.
+Request objects will implement the IStrategyRequest interface of type T, where T is your response type.
 
 ```csharp
 public class MyRequest : IStrategyRequest<MyResponse>
@@ -467,7 +472,7 @@ public class MyRequest : IStrategyRequest
 }
 ```
 
-Implement a handler by inheriting from the IStrategyHandler of type TRequest, TResponse where TRequest is your request type, and TResponse is your response type.
+Implement a handler by inheriting from the IStrategyHandler interface. Pass the request and response types as the generic parameters.
 
 Implement the Handle method as required.
 
@@ -481,7 +486,7 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 }
 ```
 
-If your request object does not have a return type, the Nothing class will be used instead. Nothing as the name states, is a substitute for void.
+If your request object does not have a return type, the Nothing class will be used instead. Nothing, as the name states, is a substitute for void.
 
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest>
@@ -499,7 +504,7 @@ Profiles are very similar to chains except you are defining conditions instead o
 
 You define a strategy by giving it a predicate based on your request object properties.
 
-> Note: These are executed in order so put your most constrained definitions first.
+> Note: These are executed in order, put your most constrained definitions first.
 
 ```csharp
 public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
@@ -512,7 +517,7 @@ public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
 }
 ```
 
-Strategies follow the same pattern as chains, inject the factory into the class you want to use it in. Call the Execute method when required.
+Strategies follow the same pattern as chains; in other words, inject the factory into the class you want to use. Call the Execute method when required.
 
 ```csharp
 public class MyService
@@ -549,7 +554,7 @@ public class MyStrategyProfile : StrategyProfile<MyRequest, MyResponse>
 }
 ```
 
-> You may only have one default handler, calling the method twice will just overwrite the previous one.
+> You may only have one default handler. In fact, calling the method twice will just overwrite the previous one.
 
 #### Accepting Strategy Dependencies
 
@@ -686,24 +691,24 @@ Do you have a complex process that can be broken up into multiple steps to enabl
 
 Do you have a common input/output interface that may use different implementations depending on a condition?
 
-It is best to think of a Strategy as a complex switch statement where each switch case may be a long-lived, complex process.
+It is best to think of a Strategy as a complex switch statement, where each switch case may be a long-lived, complex process.
 
 (A common example is having to process credit cards with different payment providers.)
 
 ### How is either different from a Mediator?
 
-A Mediator is a One-To-One relationship between a request and a response with a single handler per request.
+A Mediator is a one-to-one relationship between a request and a response with a single handler per request.
 
-A Chain of Responsibility is a One-To-Many relationship with multiple handlers per request in a specific order.
+A Chain of Responsibility is a one-to-many relationship with multiple handlers per request in a specific order.
 
-A Strategy is a One-To-Many relationship with a single handler chosen depending on a predicate.
+A Strategy is a one-to-many relationship with a single handler chosen depending on a predicate.
 
 ### Can I use them together?
 
-Yes! You can use any or all three in conjunction. None of them are mutually exclusive.
+Yes! You can use any combination of the three. They are not mutually exclusive.
 
 ### How often can I use a Chain of Responsibility or Strategy?
 
-A Chain of Responsibility is a **medium usage** pattern. It is best used when you need to break a problem down into smaller easier-to-test chunks.
+A Chain of Responsibility is a **medium usage** pattern. It is best used when you need to break a problem down into smaller, easier-to-test chunks.
 
 A Strategy is a **low usage** pattern. It is best used when you need to have multiple implementations of an algorithm that uses the same interface.

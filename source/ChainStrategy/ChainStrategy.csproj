@@ -6,7 +6,7 @@
 	  <Title>ChainStrategy</Title>
 	  <Authors>Michael Bradvica</Authors>
 	  <Company>Michael Bradvica LLC.</Company>
-	  <Description>An implmentation of the Strategy and Chain of Responsibility patterns for .NET.</Description>
+	  <Description>An implementation of the Strategy and Chain of Responsibility patterns for .NET.</Description>
 	  <Copyright>Copyright 2024. All rights reserved.</Copyright>
 	  <PackageProjectUrl>https://github.com/mjbradvica/ChainStrategy</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
@@ -30,7 +30,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	</ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\images\logo.png">
