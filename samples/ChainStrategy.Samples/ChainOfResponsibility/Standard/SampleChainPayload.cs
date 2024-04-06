@@ -2,7 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
-namespace ChainStrategy.Samples.ChainOfResponsibility
+namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
 {
     /// <summary>
     /// A sample chain payload to highlight the library.

@@ -286,6 +286,8 @@ You may also pass an exception to the Faulted method if you'd like to log the ob
     }
 ```
 
+> Do not throw exceptions from inside handlers. Catch, handle gracefully, and return a faulted payload object.
+
 #### Using A Base Handler
 
 If you happen to be repeating yourself in multiple handlers, you may create a base handler to accomplish common tasks.
@@ -293,10 +295,10 @@ If you happen to be repeating yourself in multiple handlers, you may create a ba
 The example below shows an abstract handler that will override the Middleware method. Middleware just calls DoWork under the hood.
 
 ```csharp
-public abstract class SampleLoggingHandler<T> : ChainHandler<T>
+public abstract class SampleTryCatchHandler<T> : ChainHandler<T>
     where T : ChainPayload
 {
-    protected SampleLoggingHandler(IChainHandler<T>? handler)
+    protected SampleTryCatchHandler(IChainHandler<T>? handler)
         : base(handler)
     {
     }
@@ -320,7 +322,7 @@ public abstract class SampleLoggingHandler<T> : ChainHandler<T>
 Your handlers that need to use this can simply inherit from this class instead.
 
 ```csharp
-public class MyChainHandler : SampleLoggingHandler<MyChainPayload>
+public class MyChainHandler : SampleTryCatchHandler<MyChainPayload>
 {
     public MyChainHandler(IChainHandler<MyChainPayload>? handler)
         : base(handler)
