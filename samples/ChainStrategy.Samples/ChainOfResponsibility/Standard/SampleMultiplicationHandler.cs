@@ -2,7 +2,7 @@
 // Copyright (c) Michael Bradvica LLC. All rights reserved.
 // </copyright>
 
-namespace ChainStrategy.Samples.ChainOfResponsibility
+namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
 {
     /// <summary>
     /// Sample handler to show multiplication.
