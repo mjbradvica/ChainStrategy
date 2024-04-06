@@ -4,7 +4,8 @@
 
 using System.Reflection;
 using ChainStrategy.Registration;
-using ChainStrategy.Samples.ChainOfResponsibility;
+using ChainStrategy.Samples.ChainOfResponsibility.Constrained;
+using ChainStrategy.Samples.ChainOfResponsibility.Standard;
 using ChainStrategy.Samples.Strategy;
 using Microsoft.Extensions.DependencyInjection;
 
