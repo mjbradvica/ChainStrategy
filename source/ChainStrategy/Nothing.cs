@@ -1,5 +1,5 @@
-﻿// <copyright file="Nothing.cs" company="Michael Bradvica LLC">
-// Copyright (c) Michael Bradvica LLC. All rights reserved.
+﻿// <copyright file="Nothing.cs" company="Simplex Software LLC">
+// Copyright (c) Simplex Software LLC. All rights reserved.
 // </copyright>
 
 namespace ChainStrategy
@@ -12,6 +12,6 @@ namespace ChainStrategy
         /// <summary>
         /// An instance of Nothing to represent void.
         /// </summary>
-        public static readonly Nothing Value = default!;
+        public static readonly Nothing Value = null!;
     }
 }
