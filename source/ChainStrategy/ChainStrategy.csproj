@@ -5,9 +5,9 @@
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <Title>ChainStrategy</Title>
 	  <Authors>Michael Bradvica</Authors>
-	  <Company>Simplex Software LLC.</Company>
+	  <Company>Simplex Software LLC</Company>
 	  <Description>An implementation of the Strategy and Chain of Responsibility patterns for .NET.</Description>
-	  <Copyright>Copyright 2025. All rights reserved.</Copyright>
+	  <Copyright>Copyright (c) Simplex Software LLC 2025. All rights reserved.</Copyright>
 	  <PackageProjectUrl>https://github.com/mjbradvica/ChainStrategy</PackageProjectUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <RepositoryUrl>https://github.com/mjbradvica/ChainStrategy</RepositoryUrl>
