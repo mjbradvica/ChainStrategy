@@ -24,7 +24,7 @@ namespace ChainStrategy
         /// <summary>
         /// Gets all the of the chain registrations associated with the payload.
         /// </summary>
-        public IReadOnlyList<Type> ChainRegistrations => _registrations.AsReadOnly();
+        public IEnumerable<Type> ChainRegistrations => _registrations.AsEnumerable();
 
         /// <summary>
         /// Adds a chain handler to the order of operations.

@@ -20,7 +20,7 @@ namespace ChainStrategy.Tests
         {
             var profile = new TestChainProfileWithSteps();
 
-            Assert.AreEqual(2, profile.ChainRegistrations.Count);
+            Assert.AreEqual(2, profile.ChainRegistrations.Count());
         }
     }
 }
