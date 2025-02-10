@@ -1,6 +1,9 @@
 {
     "words": [
         "Bradvica",
-        "nupkg"
+        "buildtransitive",
+        "contentfiles",
+        "nupkg",
+        "stylecop"
     ]
 }
