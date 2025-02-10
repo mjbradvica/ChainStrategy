@@ -1,9 +1,6 @@
-﻿// <copyright file="ChainProfile.cs" company="Michael Bradvica LLC">
-// Copyright (c) Michael Bradvica LLC. All rights reserved.
+﻿// <copyright file="ChainProfile.cs" company="Simplex Software LLC">
+// Copyright (c) Simplex Software LLC. All rights reserved.
 // </copyright>
-
-using System;
-using System.Collections.Generic;
 
 namespace ChainStrategy
 {
@@ -27,7 +24,7 @@ namespace ChainStrategy
         /// <summary>
         /// Gets all the of the chain registrations associated with the payload.
         /// </summary>
-        public IReadOnlyList<Type> ChainRegistrations => _registrations.AsReadOnly();
+        public IEnumerable<Type> ChainRegistrations => _registrations.AsEnumerable();
 
         /// <summary>
         /// Adds a chain handler to the order of operations.

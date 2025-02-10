@@ -1,10 +1,7 @@
-﻿// <copyright file="StrategyFactoryTests.cs" company="Michael Bradvica LLC">
-// Copyright (c) Michael Bradvica LLC. All rights reserved.
+﻿// <copyright file="StrategyFactoryTests.cs" company="Simplex Software LLC">
+// Copyright (c) Simplex Software LLC. All rights reserved.
 // </copyright>
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
