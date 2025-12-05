@@ -3,7 +3,6 @@
 // </copyright>
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChainStrategy.Tests
 {
@@ -32,7 +31,7 @@ namespace ChainStrategy.Tests
         {
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -91,7 +90,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
     }
 }
