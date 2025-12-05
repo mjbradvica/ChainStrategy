@@ -2,8 +2,6 @@
 // Copyright (c) Simplex Software LLC. All rights reserved.
 // </copyright>
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ChainStrategy.Tests
 {
     /// <summary>
@@ -20,7 +18,7 @@ namespace ChainStrategy.Tests
         {
             var profile = new TestStrategyProfile();
 
-            Assert.AreEqual(2, profile.Strategies.Count);
+            Assert.HasCount(2, profile.Strategies);
         }
 
         /// <summary>

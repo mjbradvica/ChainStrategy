@@ -5,7 +5,6 @@
 using System.Reflection;
 using ChainStrategy.Registration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChainStrategy.Tests
 {
@@ -23,7 +22,7 @@ namespace ChainStrategy.Tests
         {
             var collection = new ServiceCollection();
 
-            Assert.ThrowsException<ArgumentNullException>(() => collection.AddChainStrategy());
+            Assert.ThrowsExactly<ArgumentNullException>(() => collection.AddChainStrategy());
         }
 
         /// <summary>

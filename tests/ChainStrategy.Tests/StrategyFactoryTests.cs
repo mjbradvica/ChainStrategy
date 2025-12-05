@@ -3,7 +3,6 @@
 // </copyright>
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChainStrategy.Tests
 {
@@ -34,7 +33,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace ChainStrategy.Tests
         {
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -95,7 +94,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -110,7 +109,7 @@ namespace ChainStrategy.Tests
 
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
