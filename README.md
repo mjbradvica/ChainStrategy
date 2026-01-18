@@ -488,12 +488,12 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 }
 ```
 
-If your request object does not have a return type, the Nothing class will be used instead. Nothing, as the name states, is a substitute for void.
+If your request object does not have a return type, the Unit class will be used instead. Unit, as the name states, is a substitute for void.
 
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest>
 {
-    public async Task<Nothing> Handle(MyRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }

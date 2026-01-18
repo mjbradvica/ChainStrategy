@@ -28,7 +28,7 @@ namespace ChainStrategy.Tests
         /// <param name="payload">The payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The same payload object after the operation is complete.</returns>
-        public override Task<TestChainPayload> DoWork(TestChainPayload payload, CancellationToken cancellationToken)
+        protected override Task<TestChainPayload> DoWork(TestChainPayload payload, CancellationToken cancellationToken)
         {
             ++payload.Value;
 

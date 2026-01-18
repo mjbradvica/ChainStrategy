@@ -24,7 +24,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
         /// <param name="payload">The current payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A modified payload object.</returns>
-        public override Task<SampleChainPayload> DoWork(SampleChainPayload payload, CancellationToken cancellationToken)
+        protected override Task<SampleChainPayload> DoWork(SampleChainPayload payload, CancellationToken cancellationToken)
         {
             payload.Value += 5;
 

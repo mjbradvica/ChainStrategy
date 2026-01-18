@@ -5,7 +5,7 @@
 namespace ChainStrategy.Samples.Strategy
 {
     /// <summary>
-    /// Sample request to return Nothing.
+    /// Sample request to return Unit.
     /// </summary>
     internal sealed class SampleVoidStrategyRequest : IStrategyRequest
     {

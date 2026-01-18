@@ -25,8 +25,8 @@ namespace ChainStrategy
     /// An interface to designate a strategy handler that does not return a response.
     /// </summary>
     /// <typeparam name="TStrategyRequest">The request object for the strategy handler.</typeparam>
-    public interface IStrategyHandler<in TStrategyRequest> : IStrategyHandler<TStrategyRequest, Nothing>
-        where TStrategyRequest : IStrategyRequest<Nothing>
+    public interface IStrategyHandler<in TStrategyRequest> : IStrategyHandler<TStrategyRequest, Unit>
+        where TStrategyRequest : IStrategyRequest<Unit>
     {
     }
 }

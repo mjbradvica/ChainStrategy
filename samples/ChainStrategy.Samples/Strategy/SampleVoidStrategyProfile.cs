@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.Strategy
     /// <summary>
     /// Sample void strategy profile.
     /// </summary>
-    internal sealed class SampleVoidStrategyProfile : StrategyProfile<SampleVoidStrategyRequest, Nothing>
+    internal sealed class SampleVoidStrategyProfile : StrategyProfile<SampleVoidStrategyRequest, Unit>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleVoidStrategyProfile"/> class.

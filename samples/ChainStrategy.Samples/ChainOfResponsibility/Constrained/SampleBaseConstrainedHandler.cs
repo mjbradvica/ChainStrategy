@@ -26,7 +26,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Constrained
         /// <param name="payload">Chain payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public override Task<TConstraint> DoWork(TConstraint payload, CancellationToken cancellationToken)
+        protected override Task<TConstraint> DoWork(TConstraint payload, CancellationToken cancellationToken)
         {
             var id = payload.Id;
 

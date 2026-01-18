@@ -41,7 +41,7 @@ namespace ChainStrategy
         /// <param name="payload">The payload for the chain.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The resulting payload object after a handler is finished.</returns>
-        public abstract Task<TPayload> DoWork(TPayload payload, CancellationToken cancellationToken);
+        protected abstract Task<TPayload> DoWork(TPayload payload, CancellationToken cancellationToken);
 
         /// <summary>
         /// Allows a step to tap into lifecycle of a handler.
@@ -49,7 +49,7 @@ namespace ChainStrategy
         /// <param name="payload">The payload for the chain.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>The resulting payload after any lifecycle logic is required.</returns>
-        public virtual async Task<TPayload> Middleware(TPayload payload, CancellationToken cancellationToken)
+        protected virtual async Task<TPayload> Middleware(TPayload payload, CancellationToken cancellationToken)
         {
             return await DoWork(payload, cancellationToken);
         }
