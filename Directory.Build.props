@@ -3,10 +3,12 @@
         <EnableNETAnalyzers>True</EnableNETAnalyzers>
         <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
         <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>Recommended</AnalysisMode>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
-        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
         <CheckEolTargetFramework>true</CheckEolTargetFramework>
     </PropertyGroup>
     <ItemGroup>

@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
     /// <summary>
     /// Sample handler to show multiplication.
     /// </summary>
-    internal class SampleMultiplicationHandler : ChainHandler<SampleChainPayload>
+    internal sealed class SampleMultiplicationHandler : ChainHandler<SampleChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleMultiplicationHandler"/> class.
@@ -24,7 +24,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
         /// <param name="payload">The payload to be modified.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>An updated payload value.</returns>>
-        public override Task<SampleChainPayload> DoWork(SampleChainPayload payload, CancellationToken cancellationToken)
+        protected override Task<SampleChainPayload> DoWork(SampleChainPayload payload, CancellationToken cancellationToken)
         {
             payload.Value *= 2;
 

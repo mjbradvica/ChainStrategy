@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Test strategy profile.
     /// </summary>
-    internal class StrategyProfileWithDependentHandler : StrategyProfile<TestStrategyRequest, TestStrategyResponse>
+    internal sealed class StrategyProfileWithDependentHandler : StrategyProfile<TestStrategyRequest, TestStrategyResponse>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StrategyProfileWithDependentHandler"/> class.

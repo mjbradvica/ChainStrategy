@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Test response class for Strategy unit tests.
     /// </summary>
-    internal class TestStrategyResponse
+    internal sealed class TestStrategyResponse
     {
         /// <summary>
         /// Gets or sets the Value of the response.

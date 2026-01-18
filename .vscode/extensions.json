@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "unifiedjs.vscode-mdx",
+    "ms-dotnettools.csdevkit",
     "davidanson.vscode-markdownlint",
     "znck.grammarly",
     "editorconfig.editorconfig",

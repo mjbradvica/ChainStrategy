@@ -4,7 +4,7 @@ An implementation of the Chain of Responsibility and Strategy patterns for the d
 
 ![TempIcon](https://i.imgur.com/LMX4jJf.png)
 
-![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![downloads](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
+![build-status](https://github.com/mjbradvica/ChainStrategy/workflows/main/badge.svg) ![downloads](https://img.shields.io/nuget/dt/ChainStrategy) ![nuget](https://img.shields.io/nuget/v/ChainStrategy) ![activity](https://img.shields.io/github/last-commit/mjbradvica/ChainStrategy/master)
 
 ## Overview
 
@@ -51,7 +51,7 @@ The advantages of ChainStrategy are:
 
 ## Samples
 
-If you would like code samples for ChainStrategy, they can be found [here](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples).
+If you would like code samples for ChainStrategy, they can be found [here in the documentation](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples).
 
 ## Dependencies
 
@@ -120,7 +120,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
     {
     }
 
-    public override Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         payload.Value += 10;
 
@@ -209,7 +209,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
         _data = data;
     }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         var myData = await _data.GetData();
 
@@ -233,7 +233,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
         _strategyFactory = strategyFactory;
     }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         var strategyResult = await _strategyFactory.Execute(new StrategyRequest(payload));
 
@@ -259,7 +259,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
         _data = data;
     }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         try
         {
@@ -303,7 +303,7 @@ public abstract class SampleTryCatchHandler<T> : ChainHandler<T>
     {
     }
 
-    public override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
+    protected override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
     {
         try
         {
@@ -329,7 +329,7 @@ public class MyChainHandler : SampleTryCatchHandler<MyChainPayload>
         {
         }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         // implement and return payload.
     }
@@ -373,7 +373,7 @@ public abstract class MyConstrainedHandler<T> : ChainHandler<T>
         {
         }
 
-    public override Task<T> DoWork(T payload, CancellationToken cancellationToken)
+    protected override Task<T> DoWork(T payload, CancellationToken cancellationToken)
     {
         if (payload.id == Guid.Empty)
         {
@@ -488,12 +488,12 @@ public class MyStrategyHandler : IStrategyHandler<MyRequest, MyResponse>
 }
 ```
 
-If your request object does not have a return type, the Nothing class will be used instead. Nothing, as the name states, is a substitute for void.
+If your request object does not have a return type, the Unit class will be used instead. Unit, as the name states, is a substitute for void.
 
 ```csharp
 public class MyStrategyHandler : IStrategyHandler<MyRequest>
 {
-    public async Task<Nothing> Handle(MyRequest request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(MyRequest request, CancellationToken cancellationToken)
     {
         // implement and return response
     }
@@ -630,7 +630,7 @@ public abstract class SampleStrategyLoggingHandler<TRequest, TResponse> : IStrat
         return new TResponse();
     }
 
-    public abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
+    protected abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
 }
 ```
 

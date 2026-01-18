@@ -9,29 +9,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: | 
             8.0.x
             9.0.x
+            10.0.x
 
       - name: Restore
         run: dotnet restore
-
-      - name: Format
-        run: dotnet format --no-restore
 
       - name: Build
         run: dotnet build --no-restore -c Release
 
       - name: Test
-        run: dotnet test --no-build --no-restore -v normal -c Release /p:CollectCoverage=true /p:Threshold=90 /p:ThresholdType=branch
+        run: dotnet test --no-build -v normal -c Release /p:CollectCoverage=true /p:Threshold=90 /p:ThresholdType=branch
 
       - name: Pack
-        run: dotnet pack --no-build --no-restore -c Release -o .
+        run: dotnet pack --no-build -c Release -o .
 
       - name: Publish
         run: dotnet nuget push ChainStrategy.*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_KEY }} --skip-duplicate

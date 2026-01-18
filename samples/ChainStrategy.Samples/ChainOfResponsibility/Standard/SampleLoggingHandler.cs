@@ -26,7 +26,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
         /// <param name="payload">The payload object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to prematurely end the operation if needed.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
+        protected override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
         {
             try
             {

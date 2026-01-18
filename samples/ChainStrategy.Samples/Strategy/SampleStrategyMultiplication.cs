@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.Strategy
     /// <summary>
     /// A sample strategy handler to perform multiplication.
     /// </summary>
-    internal class SampleStrategyMultiplication : IStrategyHandler<SampleStrategyRequest, SampleStrategyResponse>
+    internal sealed class SampleStrategyMultiplication : IStrategyHandler<SampleStrategyRequest, SampleStrategyResponse>
     {
         /// <summary>
         /// Performs multiplication on our request.

@@ -27,13 +27,13 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_NoMatchingKeys_ThrowsException()
+        public async Task ExecuteStrategyNoMatchingKeysThrowsException()
         {
             _serviceCollection.AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, EmptyChainStrategyProfile>();
 
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_NoProfile_ThrowsException()
+        public async Task ExecuteStrategyNoProfileThrowsException()
         {
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_MatchingHandler_ExecutesCorrectly()
+        public async Task ExecuteStrategyMatchingHandlerExecutesCorrectly()
         {
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, TestStrategyProfile>();
@@ -70,7 +70,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_DefaultHandlerHit_ExecutesCorrectly()
+        public async Task ExecuteStrategyDefaultHandlerHitExecutesCorrectly()
         {
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, DefaultOnlyStrategyProfile>();
@@ -87,7 +87,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_HandlerWithNoPublicMethod_ThrowsException()
+        public async Task ExecuteStrategyHandlerWithNoPublicMethodThrowsException()
         {
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileBadConstructor>();
@@ -102,14 +102,14 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_HandlerWithNonRegisteredDependencies_ThrowsException()
+        public async Task ExecuteStrategyHandlerWithNonRegisteredDependenciesThrowsException()
         {
             _serviceCollection
                 .AddTransient<StrategyProfile<TestStrategyRequest, TestStrategyResponse>, StrategyProfileWithDependentHandler>();
 
             var factory = new StrategyFactory(_serviceCollection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestStrategyRequest(), CancellationToken.None));
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task ExecuteStrategy_HandlerNonRegisteredDependencies_ExecutesCorrectly()
+        public async Task ExecuteStrategyHandlerNonRegisteredDependenciesExecutesCorrectly()
         {
             _serviceCollection.AddTransient<TestChainDependency>();
             _serviceCollection

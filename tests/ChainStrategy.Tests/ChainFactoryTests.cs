@@ -27,11 +27,11 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handler_NullProfile_ThrowsException()
+        public async Task HandlerNullProfileThrowsException()
         {
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -39,13 +39,13 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handler_NoRegistrations_ThrowsException()
+        public async Task HandlerNoRegistrationsThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainPayload>, TestChainProfile>();
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handler_CanInitializedHandlerDependencies()
+        public async Task HandlerCanInitializedHandlerDependencies()
         {
             _collection.AddTransient<TestChainDependency>();
             _collection.AddTransient<ChainProfile<TestChainPayload>, TestChainProfileWithDependentHandlers>();
@@ -70,13 +70,13 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handler_HandlerWithNoPublicConstructorThrowsException()
+        public async Task HandlerHandlerWithNoPublicConstructorThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainPayload>, TestChainProfileWithBadHandler>();
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -84,13 +84,13 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handler_DependencyNotRegistered_ThrowsException()
+        public async Task HandlerDependencyNotRegisteredThrowsException()
         {
             _collection.AddTransient<ChainProfile<TestChainPayload>, TestChainProfileWithDependentHandlers>();
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
     }
 }

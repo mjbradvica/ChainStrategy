@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.Strategy
     /// <summary>
     /// A sample strategy profile that designates conditions for each handler.
     /// </summary>
-    internal class SampleStrategyProfile : StrategyProfile<SampleStrategyRequest, SampleStrategyResponse>
+    internal sealed class SampleStrategyProfile : StrategyProfile<SampleStrategyRequest, SampleStrategyResponse>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleStrategyProfile"/> class.
