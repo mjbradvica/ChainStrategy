@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Internal class to allow testing of the <see cref="ChainPayload"/> class.
     /// </summary>
-    internal class TestChainPayload : ChainPayload
+    internal sealed class TestChainPayload : ChainPayload
     {
         /// <summary>
         /// Gets or sets the test value for the request.

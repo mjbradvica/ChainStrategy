@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Test profile with only a default strategy.
     /// </summary>
-    internal class DefaultOnlyStrategyProfile : StrategyProfile<TestStrategyRequest, TestStrategyResponse>
+    internal sealed class DefaultOnlyStrategyProfile : StrategyProfile<TestStrategyRequest, TestStrategyResponse>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultOnlyStrategyProfile"/> class.

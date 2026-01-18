@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
     /// <summary>
     /// Sample handler to show multiplication.
     /// </summary>
-    internal class SampleMultiplicationHandler : ChainHandler<SampleChainPayload>
+    internal sealed class SampleMultiplicationHandler : ChainHandler<SampleChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleMultiplicationHandler"/> class.

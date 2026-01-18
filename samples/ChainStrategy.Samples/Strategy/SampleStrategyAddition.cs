@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.Strategy
     /// <summary>
     /// A sample strategy handler that will perform addition.
     /// </summary>
-    internal class SampleStrategyAddition : IStrategyHandler<SampleStrategyRequest, SampleStrategyResponse>
+    internal sealed class SampleStrategyAddition : IStrategyHandler<SampleStrategyRequest, SampleStrategyResponse>
     {
         /// <summary>
         /// Performs an addition operation.

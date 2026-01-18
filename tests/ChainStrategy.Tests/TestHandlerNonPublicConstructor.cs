@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A handler for unit testing with no public constructor.
     /// </summary>
-    internal class TestHandlerNonPublicConstructor : IChainHandler<TestChainPayload>
+    internal sealed class TestHandlerNonPublicConstructor : IChainHandler<TestChainPayload>
     {
         private TestHandlerNonPublicConstructor()
         {

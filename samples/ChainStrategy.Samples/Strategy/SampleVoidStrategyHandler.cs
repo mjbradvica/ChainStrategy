@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.Strategy
     /// <summary>
     /// Sample void strategy handler.
     /// </summary>
-    internal class SampleVoidStrategyHandler : IStrategyHandler<SampleVoidStrategyRequest>
+    internal sealed class SampleVoidStrategyHandler : IStrategyHandler<SampleVoidStrategyRequest>
     {
         /// <summary>
         /// Method for a void handler.

@@ -14,7 +14,7 @@ namespace ChainStrategy.Tests
         /// Ensures that the AddStrategy function correctly adds strategies.
         /// </summary>
         [TestMethod]
-        public void Profile_AddStrategiesCorrectly()
+        public void ProfileAddStrategiesCorrectly()
         {
             var profile = new TestStrategyProfile();
 
@@ -25,7 +25,7 @@ namespace ChainStrategy.Tests
         /// Ensures that the Default function correctly adds the default strategy.
         /// </summary>
         [TestMethod]
-        public void Profile_AddsDefaultStrategyCorrectly()
+        public void ProfileAddsDefaultStrategyCorrectly()
         {
             var profile = new TestStrategyProfile();
 

@@ -18,7 +18,7 @@ namespace ChainStrategy.Tests
         /// Ensures an exception is thrown when no assemblies are supplied.
         /// </summary>
         [TestMethod]
-        public void AddChainStrategy_NoAssemblies_ThrowsException()
+        public void AddChainStrategyNoAssembliesThrowsException()
         {
             var collection = new ServiceCollection();
 
@@ -29,7 +29,7 @@ namespace ChainStrategy.Tests
         /// Ensures that all types are correctly registered.
         /// </summary>
         [TestMethod]
-        public void AddChainStrategy_CorrectlyAddsTypes()
+        public void AddChainStrategyCorrectlyAddsTypes()
         {
             var collection = new ServiceCollection();
 

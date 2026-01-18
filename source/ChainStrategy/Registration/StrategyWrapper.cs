@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ChainStrategy.Registration
 {
     /// <inheritdoc />
-    internal class StrategyWrapper<TStrategyRequest, TStrategyResponse> : IStrategyWrapper<TStrategyResponse>
+    internal sealed class StrategyWrapper<TStrategyRequest, TStrategyResponse> : IStrategyWrapper<TStrategyResponse>
         where TStrategyRequest : IStrategyRequest<TStrategyResponse>
     {
         /// <inheritdoc/>
@@ -17,7 +17,7 @@ namespace ChainStrategy.Registration
 
             if (builder == null)
             {
-                throw new NullReferenceException("No profile was found. Did you forget to register?");
+                throw new ArgumentNullException(nameof(request), "No profile was found. Did you forget to register?");
             }
 
             var matchingKey = builder.Strategies.Keys.FirstOrDefault(conditionCheck => conditionCheck.Invoke((TStrategyRequest)request));
@@ -42,7 +42,7 @@ namespace ChainStrategy.Registration
                 }
             }
 
-            throw new NullReferenceException("A strategy handler could not be instantiated based on the arguments given.");
+            throw new ArgumentNullException(nameof(request), "A strategy handler could not be instantiated based on the arguments given.");
         }
 
         private static IStrategyHandler<TStrategyRequest, TStrategyResponse>? GetHandlerForType(Type type, IServiceProvider serviceProvider)
@@ -62,7 +62,7 @@ namespace ChainStrategy.Registration
 
                 if (dependency == null)
                 {
-                    throw new NullReferenceException($"The dependency {parameterInfo.ParameterType} could not be resolved. Did you register it?");
+                    throw new ArgumentNullException(nameof(type), $"The dependency {parameterInfo.ParameterType} could not be resolved. Did you register it?");
                 }
 
                 dependencies.Add(dependency);

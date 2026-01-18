@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A test Strategy handler that implements subtraction.
     /// </summary>
-    internal class TestStrategySubtractionHandler : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
+    internal sealed class TestStrategySubtractionHandler : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
     {
         /// <summary>
         /// Handles a test request using subtraction.

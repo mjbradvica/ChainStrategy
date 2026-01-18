@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A test chain handler with an injected dependency.
     /// </summary>
-    internal class TestChainHandlerWithDependency : ChainHandler<TestChainPayload>
+    internal sealed class TestChainHandlerWithDependency : ChainHandler<TestChainPayload>
     {
         private readonly TestChainDependency _dependency;
 

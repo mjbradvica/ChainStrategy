@@ -35,7 +35,7 @@ namespace ChainStrategy
                 return await service.Execute(request, _serviceProvider, cancellationToken);
             }
 
-            throw new NullReferenceException("The type of the request object could not be determined.");
+            throw new ArgumentNullException(nameof(request), "The type of the request object could not be determined.");
         }
     }
 }

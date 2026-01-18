@@ -2,8 +2,6 @@
 // Copyright (c) Simplex Software LLC. All rights reserved.
 // </copyright>
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace ChainStrategy.Tests
 {
     /// <summary>
@@ -17,7 +15,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handle_FaultedRequest_ReturnsImmediately()
+        public async Task HandleFaultedRequestReturnsImmediately()
         {
             var handler = new TestChainHandler(null);
 
@@ -34,7 +32,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handle_NullNextHandler_ProcessesAndReturns()
+        public async Task HandleNullNextHandlerProcessesAndReturns()
         {
             var handler = new TestChainHandler(null);
 
@@ -50,7 +48,7 @@ namespace ChainStrategy.Tests
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [TestMethod]
-        public async Task Handle_WithNextHandler_ProcessesAndReturns()
+        public async Task HandleWithNextHandlerProcessesAndReturns()
         {
             var handler = new TestChainHandler(new TestChainHandler(null));
 

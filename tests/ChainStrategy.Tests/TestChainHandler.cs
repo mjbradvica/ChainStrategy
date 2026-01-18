@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Test class for the abstract <see cref="ChainHandler{TRequest}"/>.
     /// </summary>
-    internal class TestChainHandler : ChainHandler<TestChainPayload>
+    internal sealed class TestChainHandler : ChainHandler<TestChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TestChainHandler"/> class.

@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A test Strategy with a dependency.
     /// </summary>
-    internal class TestStrategyWithDependency : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
+    internal sealed class TestStrategyWithDependency : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
     {
         private readonly TestChainDependency _dependency;
 

@@ -16,7 +16,7 @@ namespace ChainStrategy.Tests
         /// Ensures that method correctly adds to the profile.
         /// </summary>
         [TestMethod]
-        public void AddStep_CorrectlyAddsToProfile()
+        public void AddStepCorrectlyAddsToProfile()
         {
             var profile = new TestChainProfileWithSteps();
 

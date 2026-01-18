@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// Test strategy handler with a bad constructor.
     /// </summary>
-    internal class TestStrategyHandlerBadConstructor : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
+    internal sealed class TestStrategyHandlerBadConstructor : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
     {
         private TestStrategyHandlerBadConstructor()
         {

@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
     /// <summary>
     /// A sample chain payload to highlight the library.
     /// </summary>
-    internal class SampleChainPayload : ChainPayload
+    internal sealed class SampleChainPayload : ChainPayload
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleChainPayload"/> class.

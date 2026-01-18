@@ -12,7 +12,7 @@ namespace ChainStrategy
     public sealed class ChainFactory : IChainFactory
     {
         private readonly IServiceProvider _serviceProvider;
-        private IList<Type> _registrations;
+        private List<Type> _registrations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainFactory"/> class.
@@ -32,12 +32,12 @@ namespace ChainStrategy
 
             if (profile == null)
             {
-                throw new NullReferenceException("No profile's were found for the provided payload.");
+                throw new ArgumentNullException(nameof(payload), "No profile's were found for the provided payload.");
             }
 
             if (!profile.ChainRegistrations.Any())
             {
-                throw new NullReferenceException("The profile does not have any steps registered.");
+                throw new ArgumentNullException(nameof(payload), "The profile does not have any steps registered.");
             }
 
             _registrations = profile.ChainRegistrations.Reverse().ToList();
@@ -49,7 +49,7 @@ namespace ChainStrategy
                 return await handler.Handle(payload, cancellationToken);
             }
 
-            throw new NullReferenceException("A handler could not be initialized for the parameters supplied. Does your profile have steps?");
+            throw new ArgumentNullException(nameof(payload), "A handler could not be initialized for the parameters supplied. Does your profile have steps?");
         }
 
         private (IChainHandler<TPayload>? Handler, int Index) InstantiateHandlers<TPayload>(IChainHandler<TPayload>? handler, int index)
@@ -80,7 +80,7 @@ namespace ChainStrategy
 
                             if (parameter == null)
                             {
-                                throw new NullReferenceException($"A chain parameter could not be resolved for the type {dependency.ParameterType}. Did you register it?");
+                                throw new ArgumentNullException(nameof(handler), $"A chain parameter could not be resolved for the type {dependency.ParameterType}. Did you register it?");
                             }
 
                             dependencies.Add(parameter);
@@ -92,7 +92,7 @@ namespace ChainStrategy
                     return InstantiateHandlers(step, ++index);
                 }
 
-                throw new NullReferenceException($"A public constructor for {handlerType} could not be found. You must have a public constructor.");
+                throw new ArgumentNullException(nameof(handler), $"A public constructor for {handlerType} could not be found. You must have a public constructor.");
             }
             else
             {

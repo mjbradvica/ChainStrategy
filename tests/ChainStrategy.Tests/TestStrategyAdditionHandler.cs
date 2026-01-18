@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A test handler for Strategy unit tests that implements addition.
     /// </summary>
-    internal class TestStrategyAdditionHandler : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
+    internal sealed class TestStrategyAdditionHandler : IStrategyHandler<TestStrategyRequest, TestStrategyResponse>
     {
         /// <summary>
         /// Handles the request using addition.

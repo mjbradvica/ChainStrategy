@@ -16,7 +16,7 @@ namespace ChainStrategy.Tests
         /// Ensures the correct property values after the Faulted method is called.
         /// </summary>
         [TestMethod]
-        public void Faulted_HasCorrectProperties()
+        public void FaultedHasCorrectProperties()
         {
             var request = new TestChainPayload();
 
@@ -30,7 +30,7 @@ namespace ChainStrategy.Tests
         /// Ensures the correct property values after the Faulted method is called with an exception.
         /// </summary>
         [TestMethod]
-        public void Faulted_WithException_HasCorrectProperties()
+        public void FaultedWithExceptionHasCorrectProperties()
         {
             var exception = new ArgumentNullException();
 

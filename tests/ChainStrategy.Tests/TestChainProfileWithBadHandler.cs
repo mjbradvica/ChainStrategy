@@ -7,7 +7,7 @@ namespace ChainStrategy.Tests
     /// <summary>
     /// A test profile for a chain with non-public handler constructors.
     /// </summary>
-    internal class TestChainProfileWithBadHandler : ChainProfile<TestChainPayload>
+    internal sealed class TestChainProfileWithBadHandler : ChainProfile<TestChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TestChainProfileWithBadHandler"/> class.

@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.ChainOfResponsibility.Standard
     /// <summary>
     /// Sample handler to show addition.
     /// </summary>
-    internal class SampleAdditionHandler : ChainHandler<SampleChainPayload>
+    internal sealed class SampleAdditionHandler : ChainHandler<SampleChainPayload>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SampleAdditionHandler"/> class.

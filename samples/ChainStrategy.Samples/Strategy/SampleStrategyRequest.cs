@@ -7,7 +7,7 @@ namespace ChainStrategy.Samples.Strategy
     /// <summary>
     /// A class that represents a sample strategy request.
     /// </summary>
-    internal class SampleStrategyRequest : IStrategyRequest<SampleStrategyResponse>
+    internal sealed class SampleStrategyRequest : IStrategyRequest<SampleStrategyResponse>
     {
         /// <summary>
         /// Gets or sets the initial value for the sample request.
