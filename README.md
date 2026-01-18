@@ -51,7 +51,7 @@ The advantages of ChainStrategy are:
 
 ## Samples
 
-If you would like code samples for ChainStrategy, they can be found [here](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples).
+If you would like code samples for ChainStrategy, they can be found [here in the documentation](https://github.com/mjbradvica/ChainStrategy/tree/master/samples/ChainStrategy.Samples).
 
 ## Dependencies
 
@@ -120,7 +120,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
     {
     }
 
-    public override Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         payload.Value += 10;
 
@@ -209,7 +209,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
         _data = data;
     }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         var myData = await _data.GetData();
 
@@ -233,7 +233,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
         _strategyFactory = strategyFactory;
     }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         var strategyResult = await _strategyFactory.Execute(new StrategyRequest(payload));
 
@@ -259,7 +259,7 @@ public class MyChainHandler : ChainHandler<MyChainPayload>
         _data = data;
     }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         try
         {
@@ -303,7 +303,7 @@ public abstract class SampleTryCatchHandler<T> : ChainHandler<T>
     {
     }
 
-    public override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
+    protected override async Task<T> Middleware(T payload, CancellationToken cancellationToken)
     {
         try
         {
@@ -329,7 +329,7 @@ public class MyChainHandler : SampleTryCatchHandler<MyChainPayload>
         {
         }
 
-    public override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
+    protected override async Task<MyChainPayload> DoWork(MyChainPayload payload, CancellationToken cancellationToken)
     {
         // implement and return payload.
     }
@@ -373,7 +373,7 @@ public abstract class MyConstrainedHandler<T> : ChainHandler<T>
         {
         }
 
-    public override Task<T> DoWork(T payload, CancellationToken cancellationToken)
+    protected override Task<T> DoWork(T payload, CancellationToken cancellationToken)
     {
         if (payload.id == Guid.Empty)
         {
@@ -630,7 +630,7 @@ public abstract class SampleStrategyLoggingHandler<TRequest, TResponse> : IStrat
         return new TResponse();
     }
 
-    public abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
+    protected abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
 }
 ```
 

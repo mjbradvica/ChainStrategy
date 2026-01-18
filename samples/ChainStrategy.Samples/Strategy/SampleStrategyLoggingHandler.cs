@@ -40,7 +40,7 @@ namespace ChainStrategy.Samples.Strategy
             }
             catch (Exception exception)
             {
-                _logger.Error(exception, $"An exception occurred at {DateTime.UtcNow} in the {GetType().Name} handler.");
+                _logger.Error(exception, "An exception occurred at {DateTime} in the {Name} handler.", DateTime.UtcNow, GetType().Name);
             }
 
             return new TResponse();
@@ -52,6 +52,6 @@ namespace ChainStrategy.Samples.Strategy
         /// <param name="request">The request object.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
+        protected abstract Task<TResponse> DoWork(TRequest request, CancellationToken cancellationToken);
     }
 }
