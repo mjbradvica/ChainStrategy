@@ -31,7 +31,7 @@ namespace ChainStrategy.Tests
         {
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace ChainStrategy.Tests
 
             var factory = new ChainFactory(_collection.BuildServiceProvider());
 
-            await Assert.ThrowsExactlyAsync<NullReferenceException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () => await factory.Execute(new TestChainPayload(), CancellationToken.None));
         }
     }
 }
