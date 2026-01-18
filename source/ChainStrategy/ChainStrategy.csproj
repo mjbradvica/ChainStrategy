@@ -14,7 +14,7 @@
 	  <PackageTags>strategy, chain-of-responsibility,</PackageTags>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageIcon>logo.png</PackageIcon>
-	  <Version>1.2.1</Version>
+	  <Version>1.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
