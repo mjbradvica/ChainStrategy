@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The current versions are supported; FactoryFoundation follows Microsoft's policy.
+The current versions are supported; ChainStrategy follows Microsoft's policy.
 
 | Version | Dotnet | Supported          |
 | ------- | ------ | ------------------ |
@@ -10,7 +10,7 @@ The current versions are supported; FactoryFoundation follows Microsoft's policy
 
 ## Reporting a Vulnerability
 
-FactoryFoundation will be normally updated on each dotnet major update.
+ChainStrategy will be normally updated on each dotnet major update.
 
 The exception being if a sub-package has a vulnerability.
 
