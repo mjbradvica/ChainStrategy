@@ -1,9 +1,4 @@
 {
-    "words": [
-        "Bradvica",
-        "buildtransitive",
-        "contentfiles",
-        "nupkg",
-        "stylecop"
-    ]
+    "ignorePaths": ["Directory.Build.props", ".gitignore", ".gitattributes", ".editorconfig", "./**/*.csproj"],
+    "words": ["Bradvica"]
 }
