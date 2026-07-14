@@ -26,7 +26,7 @@ This is a personal project maintained by a single developer. While I welcome con
 2. Create a feature branch
 3. Make your changes with clear commit messages
 4. Submit a pull request with description of changes
-5. I'll review and provide feedback within [timeframe]
+5. I'll review and provide feedback within 1 week
 
 ## Decision Making
 
@@ -53,7 +53,7 @@ While I have final say, I value community input:
 
 ## Project Goals
 
-[Describe your project's mission and long-term goals]
+The goals of ChainStrategy are the same as Simplex Software. To provide the best open source project for the .NET landscape.
 
 ## Response Times
 
