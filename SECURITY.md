@@ -6,7 +6,8 @@ The current versions are supported; ChainStrategy follows Microsoft's policy.
 
 | Version | Dotnet | Supported          |
 | ------- | ------ | ------------------ |
-| 0.9.0   | 8/9/10 | :white_check_mark: |
+| 1.x.x   | 8/9/10 | :white_check_mark: |
+| 0.9.0   | 8/9/10 | :x:                |
 
 ## Reporting a Vulnerability
 
